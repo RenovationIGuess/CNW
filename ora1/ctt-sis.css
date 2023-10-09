@@ -1,0 +1,646 @@
+.ctt-sis__header {
+  font: 14px "Segoe UI", "Helvetica Neue", "Droid Sans", Arial, Tahoma, Geneva,
+    Sans-serif;
+  color: var(--ctt-sis-header-font-color);
+  border: var(--ctt-sis-header-border);
+}
+
+.ctt-sis__header-pane {
+  border-top: solid 10px #9c1010;
+  padding-top: 10px;
+}
+
+.ctt-sis__header-pane .ctt-sis__header-container {
+  height: 100px;
+  padding-bottom: 10px;
+}
+
+.ctt-sis__header-container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.ctt-sis__header-container::before {
+  display: table;
+  content: " ";
+}
+
+.ctt-sis__header-container::after {
+  clear: both;
+  display: table;
+  content: " ";
+}
+
+@media (min-width: 768px) {
+  .ctt-sis__header-container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .ctt-sis__header-container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ctt-sis__header-container {
+    width: 1170px;
+  }
+}
+
+.ctt-sis__header-container img {
+  height: 100%;
+  max-width: none;
+}
+
+.top-menu-pane {
+  min-height: 20px;
+  width: 100%;
+  background-color: #f8f8f8;
+  box-shadow: 0px -5px 10px #9c1010;
+  transition: height 0.25s ease;
+}
+
+.top-menu-pane__wrapper {
+  width: 100%;
+  /* float: left; */
+  background-color: var(--top-menu-bg-color);
+  padding: 2px;
+}
+
+.top-menu-pane__list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.top-menu-pane__item {
+  cursor: pointer;
+  text-align: center;
+  font-size: medium;
+  /* min-width: 45px;
+  width: 25%; */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.top-menu-pane__item:hover {
+  background-color: #9c1010;
+  color: #fff;
+}
+
+.top-menu-pane__item:hover .sub-menu__wrapper {
+  display: block;
+}
+
+.top-menu-pane__item-content {
+  padding: 3px 21px 3px 7px;
+  display: block;
+  white-space: nowrap;
+  font: 1em Tahoma, Geneva, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.top-menu-pane__item-content img {
+  width: 16px;
+  height: 16px;
+  color: rgba(0, 0, 0, 0);
+  background-image: url("	https://ctt-sis.hust.edu.vn/DXR.axd?r=0_0-PugLk");
+  background-position: -126px -126px;
+  margin: 1px 5px 1px 0px;
+}
+
+.top-menu-pane__item-content span {
+  line-height: 100%;
+  padding: 2px 0;
+  text-decoration: inherit;
+}
+
+.expand-arrow__wrapper {
+  height: 21.6406px;
+  padding: 3px 6px 3px 0;
+}
+
+.expand-arrow__wrapper img {
+  width: 7px;
+  height: 4px;
+  margin-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: url("	https://ctt-sis.hust.edu.vn/DXR.axd?r=0_2946-PugLk");
+  background-position-x: -343px;
+  background-position-y: -131px;
+}
+
+.sub-menu__wrapper {
+  display: none;
+  z-index: 2;
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  line-height: 27.64px;
+  color: #343434;
+  font-size: 16px;
+  font-family: Tahoma, Georgira, sans-serif;
+  /* border: 1px solid rgb(199, 174, 174); */
+  border: 1px solid #cbcbcb;
+  background-color: white;
+  padding: 0;
+  -webkit-box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
+.sub-menu__item {
+  padding-left: 6px;
+  width: 300px;
+  text-align: left;
+  cursor: pointer;
+  color: #343434;
+}
+
+.sub-menu__item:hover {
+  background-color: #9c1010;
+  color: #fff;
+}
+
+.sub-menu__item a {
+  color: inherit;
+  padding: 6px 18px 6px 6px;
+  font: 1em Tahoma, Geneva, sans-serif;
+  float: none !important;
+  white-space: nowrap;
+  display: block;
+}
+
+.home-page {
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+
+.home-page__wrapper {
+  width: 100%;
+  float: left;
+}
+
+.home-page__list,
+.home-page__item {
+  margin-top: -5px;
+  list-style-type: none;
+}
+
+.home-page__item a {
+  height: 25px;
+  display: block;
+  float: left;
+  font: 400 14px/25px arial;
+  background: #eceeed;
+  padding: 0 5px;
+  white-space: nowrap;
+  border-left: 3px solid #9f224e;
+  color: #9f224e;
+  cursor: pointer;
+}
+
+.home-page__item a:hover {
+  text-decoration: underline;
+}
+
+.clear {
+  clear: both;
+}
+
+.main-layout {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  width: 285px;
+  padding-top: 10px;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  background: #f2f1eb;
+  padding: 10px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.expandable {
+  background: url("https://ctt-sis.hust.edu.vn/Content/Images/right-arrow.png")
+    no-repeat 0 16px;
+  flex-direction: column;
+}
+
+.sidebar-section__header {
+  font-weight: bold;
+  text-align: center;
+  color: #8c1515;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  margin-right: 10px;
+}
+
+.sidebar-option__list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.sidebar-option__item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 10px;
+}
+
+.row-title img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  margin-left: 4px;
+  margin-top: -4px;
+  cursor: pointer;
+}
+
+.sub-option__list {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sub-option__item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 10px;
+}
+
+.sidebar-option__item a:hover {
+  background: #ebebeb;
+  color: #9e100e;
+}
+
+.sidebar-option__item:hover .sub-option__list {
+  display: flex;
+}
+
+.sidebar-option__item a {
+  width: 100%;
+  text-decoration: none;
+  padding: 5px 7px;
+  border-bottom: 1px solid #ccc;
+  line-height: 2;
+  display: flex;
+  align-items: center;
+  color: #337ab7;
+}
+
+.badge {
+  background-color: #9c1010;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+.student-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  /* overflow: hidden; */
+  padding: 10px;
+}
+
+.student-info__header {
+  width: 100%;
+  padding: 5px;
+}
+
+.student-info__header h3 {
+  font-weight: bold;
+  text-align: center;
+  color: #8c1515;
+  margin-top: 5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.1;
+  font-family: inherit;
+}
+
+.student-info__header hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eee;
+  height: 0;
+}
+
+.info-detail {
+  padding: 5px;
+  width: 100%;
+}
+
+.info-detail__row {
+  margin: 0 -15px;
+}
+
+.flex {
+  display: flex;
+}
+
+.row-title {
+  font-family: "Segoe UI";
+  font-size: 16px;
+  font-weight: bold;
+  color: #8c1515;
+  vertical-align: middle;
+  line-height: 2em;
+}
+
+.info-detail__row hr {
+  line-height: 4px;
+  border: 3px solid #ff9900;
+  display: block;
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 0;
+}
+
+.info-wrap {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.student-avatar__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+}
+
+.student-avatar__wrapper img {
+  width: 200px;
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  padding: 4px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 10px 10px 10px #add9e6;
+  margin-bottom: 16px;
+}
+
+.student-avatar__wrapper p {
+  font-family: "Arimo", sans-serif;
+  font-size: 16px;
+  line-height: 2em;
+}
+
+.info-font {
+  font-family: "Arimo", sans-serif;
+  font-size: 16px;
+  line-height: 2em;
+}
+
+.student-school-info {
+  width: 33.33333333%;
+}
+
+.learning-info {
+  width: 50%;
+}
+
+.personal-info {
+  width: 50%;
+}
+
+.footer {
+  width: 100%;
+  float: left;
+}
+
+.footer-main {
+  width: 100%;
+  float: left;
+  background: url("https://ctt-sis.hust.edu.vn/Content/Images/footer.jpg")
+    no-repeat top;
+  height: 100px;
+}
+
+.footer-left {
+  width: 40%;
+  float: left;
+  margin: 2%;
+}
+
+.footer-right {
+  width: 35%;
+  float: right;
+  text-align: right;
+  margin-right: 5%;
+  color: #fff;
+}
+
+.footer-right hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #fff;
+  line-height: 1px;
+}
+
+.footer-right p {
+  margin: 0 0 10px;
+  line-height: 1px;
+}
+
+.change-avatar__button {
+  padding: 2px 16px;
+  border-radius: 6px;
+  background-color: var(--top-menu-bg-color);
+  font-size: 14px;
+  color: var(--ctt-sis-header-font-color);
+  font-family: "Arimo", sans-serif;
+  font-size: 16px;
+  line-height: 2em;
+  cursor: pointer;
+}
+
+.change-avatar__button:hover {
+  background-color: #9c1010;
+  color: #fff;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-input {
+  padding: 2px 0;
+  padding-left: 8px;
+  border-radius: 6px;
+  border: 1px solid #cbcbcb;
+}
+
+.info-input:focus {
+  outline: none;
+}
+
+.width-42 {
+  width: 42%;
+}
+
+.confirm-button__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.cancel-button {
+  background-color: var(--top-menu-bg-color);
+  color: var(--ctt-sis-header-font-color);
+}
+
+.confirm-button {
+  background-color: #9c1010;
+  color: #fff;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 2px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: "Arimo", sans-serif;
+  font-size: 16px;
+  line-height: 2em;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.top-menu-pane--mini {
+  display: none;
+  padding: 12px;
+  background-color: #f8f8f8;
+  width: 100%;
+  box-shadow: 0px -5px 10px #9c1010;
+  /* display: flex; */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menu-bar__item {
+  cursor: pointer;
+}
+
+.menu-bar__item img {
+  background: url("https://ctt-sis.hust.edu.vn/DXR.axd?r=1_86-OugLk");
+  background-position: -258px -67px;
+  width: 41px;
+  height: 41px;
+}
+
+@media (max-width: 767px) and (min-width: 320px) {
+  .sidebar {
+    display: none;
+  }
+
+  .info-detail__row {
+    flex-direction: column;
+  }
+
+  .info-detail__row > div {
+    width: 100%;
+  }
+
+  .top-menu-pane--mini {
+    display: flex;
+  }
+
+  .top-menu-pane {
+    display: none;
+    /* height: 0; */
+  }
+}
+
+.sidebar--open {
+  display: block;
+}
+
+.top-menu-pane--open {
+  display: block;
+  /* height: auto; */
+}
+
+.top-menu-pane--open .top-menu-pane__list {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.top-menu-pane--open .top-menu-pane__list .top-menu-pane__item {
+  width: 100%;
+  padding: 6px 9px 6px 8px;
+}
+
+.top-menu-pane--open
+  .top-menu-pane__list
+  .top-menu-pane__item
+  .top-menu-pane__item-content {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.top-menu-pane--open
+  .top-menu-pane__list
+  .top-menu-pane__item
+  .expand-arrow__wrapper {
+  transform: rotate(-90deg);
+  padding: 0;
+}
