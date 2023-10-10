@@ -527,6 +527,11 @@
   border: 1px solid #cbcbcb;
 }
 
+.info-select {
+  padding: 8px 0;
+  padding-left: 4px;
+}
+
 .info-input:focus {
   outline: none;
 }
@@ -548,7 +553,10 @@
 }
 
 .confirm-button {
-  background-color: #9c1010;
+  background-color: #9c1010; 
+}
+
+.confirm-button a {
   color: #fff;
 }
 

@@ -25,10 +25,16 @@
     <!-- Top Menu Bar but smaller version -->
     <div class="top-menu-pane--mini">
       <div class="menu-bar__item sidebar-button">
-        <img src="https://ctt-sis.hust.edu.vn/DXR.axd?r=1_86-OugLk" alt="hamburger-icon" />
+        <img
+          src="https://ctt-sis.hust.edu.vn/DXR.axd?r=1_86-OugLk"
+          alt="hamburger-icon"
+        />
       </div>
       <div class="menu-bar__item top-menu-button">
-        <img src="https://ctt-sis.hust.edu.vn/DXR.axd?r=1_86-OugLk" alt="hamburger-icon" />
+        <img
+          src="https://ctt-sis.hust.edu.vn/DXR.axd?r=1_86-OugLk"
+          alt="hamburger-icon"
+        />
       </div>
     </div>
 
@@ -206,7 +212,7 @@
       <div class="home-page__wrapper">
         <ul class="home-page__list">
           <li class="home-page__item">
-            <a>Trang chủ</a>
+            <a href="index.html">Trang chủ</a>
           </li>
         </ul>
         <div class="clear"></div>
@@ -359,7 +365,7 @@
           </ul>
         </div>
       </div>
-      <div class="student-info">
+      <form action="" method="POST" class="student-info">
         <div class="student-info__header">
           <h3>chỉnh sửa thông tin cá nhân</h3>
           <hr />
@@ -382,59 +388,142 @@
               </label>
             </div>
             <div class="student-school-info info-wrap info-font flex-col">
-              <b>Họ và tên&emsp;:&nbsp;</b>
+              <label for="student-name">
+                <b>Họ và tên&emsp;:&nbsp;</b>
+              </label>
               <input
                 class="info-input info-font"
                 type="text"
                 value="Nguyễn Tùng Lâm"
+                onchange=""
+                id="student-name"
+                name="student-name"
               />
               <br />
-              <b>Năm vào trường&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="2020" />
+              <label for="able-to-school-date">
+                <b>Năm vào trường&emsp;:&nbsp;</b>
+              </label>
+              <input
+                id="able-to-school-date"
+                name="able-to-school-date"
+                class="info-input info-font"
+                type="text"
+                value="2020"
+              />
               <br />
-              <b>Bậc đào tạo&emsp;:&nbsp;</b>
+              <label for="learn-level">
+                <b>Bậc đào tạo&emsp;:&nbsp;</b>
+              </label>
               <input
                 class="info-input info-font"
+                id="learn-level"
+                name="learn-level"
                 type="text"
                 value="KSCLC-TN-TT-VN-ICT"
               />
               <br />
-              <b>Chương trình&emsp;:&nbsp;</b>
-              <input
-                class="info-input info-font"
-                type="text"
+              <label for="program">
+                <b>Chương trình&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="program"
+                id="program"
                 value="Công nghệ thông tin Việt-Nhật 2020"
-              />
+              >
+                <option value="Công nghệ thông tin Việt-Nhật 2021">
+                  Công nghệ thông tin Việt-Nhật 2021
+                </option>
+                <option value="Công nghệ thông tin Việt-Nhật 2022">
+                  Công nghệ thông tin Việt-Nhật 2022
+                </option>
+                <option value="Công nghệ thông tin Việt-Nhật 2023">
+                  Công nghệ thông tin Việt-Nhật 2023
+                </option>
+              </select>
               <br />
-              <b>Khoa/Viện quản lý&emsp;:&nbsp;</b>
-              <input
-                class="info-input info-font"
-                type="text"
+              <label for="manage">
+                <b>Khoa/Viện quản lý&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="manage"
+                id="manage"
                 value="Trường Công nghệ Thông tin và Truyền thông"
-              />
+              >
+                <option value="Trường Công nghệ Thông tin và Truyền thông">
+                  Trường Công nghệ Thông tin và Truyền thông
+                </option>
+                <option value="Trường B">Trường B</option>
+                <option value="Trường C">Trường C</option>
+              </select>
               <br />
-              <b>Tình trạng học tập&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="Học" />
+              <label for="learning-status">
+                <b>Tình trạng học tập&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="learning-status"
+                id="learning-status"
+                value="Học"
+              >
+                <option value="Học">Học</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Thôi học">Thôi học</option>
+              </select>
               <br />
             </div>
             <div class="student-school-info info-wrap info-font flex-col">
-              <b>Giới tính&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="Nam" />
+              <label for="sex">
+                <b>Giới tính&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="sex"
+                id="sex"
+                value="Nam"
+              >
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+              </select>
               <br />
-              <b>Lớp&emsp;:&nbsp;</b>
-              <input
-                class="info-input info-font"
-                type="text"
+              <label for="class">
+                <b>Lớp&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="class"
+                id="class"
                 value="Việt Nhật 03-K65"
-              />
+              >
+                <option value="Việt Nhật 03-K65">Việt Nhật 03-K65</option>
+                <option value="Việt Nhật 04-K65">Việt Nhật 04-K65</option>
+                <option value="Việt Nhật 05-K65">Việt Nhật 05-K65</option>
+              </select>
               <br />
-              <b>Khóa học&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="65" />
+              <label for="course">
+                <b>Khóa học&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="course"
+                id="course"
+                value="65"
+              >
+                <option value="65">65</option>
+                <option value="66">66</option>
+                <option value="67">67</option>
+              </select>
               <br />
-              <b>Email&emsp;:&nbsp;</b>
+              <label for="email">
+                <b>Email&emsp;:&nbsp;</b>
+              </label>
               <input
                 class="info-input info-font"
                 type="text"
+                id="email"
+                name="email"
                 value="lam.nt204998@sis.hust.edu.vn"
               />
               <br />
@@ -446,11 +535,30 @@
           </div>
           <div class="info-detail__row flex">
             <div class="learning-info info-wrap info-font flex-col">
-              <b>Tổng kết học kỳ&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="20222" />
+              <label for="summary_semester">
+                <b>Tổng kết học kỳ&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="summary_semester"
+                id="summary_semester"
+                value="20222"
+              >
+                <option value="20221">20221</option>
+                <option value="20222">20222</option>
+                <option value="20231">20231</option>
+              </select>
               <br />
-              <b>Trung bình tích lũy&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="0" />
+              <label for="save-middle">
+                <b>Trung bình tích lũy&emsp;:&nbsp;</b>
+              </label>
+              <input
+                id=""
+                name=""
+                class="info-input info-font"
+                type="text"
+                value="0"
+              />
               <br />
               <b>Số TC nợ đăng ký&emsp;:&nbsp;</b>
               <input class="info-input info-font" type="text" value="0" />
@@ -460,11 +568,34 @@
               <b>Số TC tích lũy&emsp;:&nbsp;</b>
               <input class="info-input info-font" type="text" value="110" />
               <br />
-              <b>Trình độ sinh viên&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="2020" />
+              <label for="student-level">
+                <b>Trình độ sinh viên&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="student-level"
+                id="student-level"
+                value="4"
+              >
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+              </select>
               <br />
-              <b>Mức cảnh báo&emsp;:&nbsp;</b>
-              <input class="info-input info-font" type="text" value="M0" />
+              <label for="warn-level">
+                <b>Mức cảnh báo&emsp;:&nbsp;</b>
+              </label>
+              <select
+                class="info-input info-font info-select"
+                name="warn-level"
+                id="warn-level"
+                value="M0"
+              >
+                <option value="M0">M0</option>
+                <option value="M1">M1</option>
+                <option value="M2">M2</option>
+                <option value="M3">M3</option>
+              </select>
               <br />
             </div>
           </div>
@@ -474,7 +605,9 @@
           </div>
           <div class="info-detail__row flex">
             <div class="personal-info info-wrap info-font flex-col">
-              <b>Dân tộc&emsp;:&nbsp;</b>
+              <label>
+                <b>Dân tộc&emsp;:&nbsp;</b>
+              </label>
               <input
                 class="info-input info-font"
                 type="text"
@@ -621,17 +754,17 @@
             </span>
           </div>
         </div>
-      </div>
+      </form>
     </div>
 
     <!-- Confirm Button -->
     <div class="confirm-button__container">
       <button class="cancel-button">
-        <a href="index.html">
-          Hủy
-        </a>
+        <a href="index.html"> Hủy </a>
       </button>
-      <button class="confirm-button">Xác nhận</button>
+      <button type="submit" class="confirm-button">
+        <a href="index.html">Xác nhận</a>
+      </button>
     </div>
 
     <!-- Footer -->
