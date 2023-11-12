@@ -553,7 +553,7 @@
 }
 
 .confirm-button {
-  background-color: #9c1010; 
+  background-color: #9c1010;
 }
 
 .confirm-button a {
@@ -655,4 +655,30 @@
   .expand-arrow__wrapper {
   transform: rotate(-90deg);
   padding: 0;
+}
+
+#student-number {
+  width: 100px;
+}
+
+/* input, select {
+  word-wrap: break-word;
+  word-break: break-word;
+} */
+
+input:disabled,
+select:disabled {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  color: #343434;
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
+select:disabled::-ms-expand {
+  display: none;
 }
