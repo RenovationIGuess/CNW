@@ -1,0 +1,111 @@
+.skeleton-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  // border: 1px solid var(--default-border-color);
+  vertical-align: top;
+}
+
+.skeleton-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+.skeleton-background-image {
+  width: 100%;
+  height: 200px;
+}
+
+.skeleton-title {
+  width: 168px;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.skeleton-time {
+  width: 72px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.skeleton-change-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.skeleton-change-label {
+  width: 96px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.skeleton-change-row {
+  width: 100%;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.skeleton-change-row-80 {
+  width: 80%;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.skeleton-change-row-60 {
+  width: 60%;
+  height: 18px;
+  border-radius: 3px;
+}
+
+.skeleton-loading-height-16-width-20 {
+  width: 20%;
+  height: 16px;
+  border-radius: 6px;
+}
+
+.skeleton-loading-height-20-width-20 {
+  width: 20%;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.skeleton-loading-height-20-width-40 {
+  width: 20%;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.skeleton-loading-height-20-width-60 {
+  width: 60%;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.skeleton-loading-height-20-width-full {
+  width: 100%;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.skeleton-reply-count {
+  width: 48px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.skeleton-vote-count {
+  width: 20px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.skeleton-comment-content {
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

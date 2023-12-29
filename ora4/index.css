@@ -1,0 +1,13 @@
+.css-list {
+  padding: 10px;
+  border: 2px solid #85cf3f;
+  margin: 2px;
+  border-radius: 5px;
+}
+
+form.form {
+  display: grid;
+  grid-template-columns: 100px 400px;
+  align-items: start;
+  row-gap: 10px;
+}

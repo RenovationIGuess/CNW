@@ -1,0 +1,28 @@
+.epr-main {
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  border-style: none !important;
+
+  .epr-emoji-category-label {
+    font-size: 14px !important;
+  }
+
+  .epr-header-overlay {
+    padding: 8px 16px !important;
+  }
+
+  #epr-category-nav-id {
+    padding: 4px 0 !important;
+  }
+
+  .epr-preview {
+    height: 48px !important;
+
+    img {
+      height: 24px !important;
+      width: 24px !important;
+    }
+  }
+}

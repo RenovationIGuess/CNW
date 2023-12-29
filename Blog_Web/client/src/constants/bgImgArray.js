@@ -1,0 +1,16 @@
+export const bgImgArray = [
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fbgex2.jpg?alt=media&token=b6d8fea0-f61f-408c-8cb7-bee56c8b3879',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fbgex3.jpg?alt=media&token=24989544-cf0d-4be6-b254-7fd9bf037e4d',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fbgexample1.jpg?alt=media&token=f350ec84-c9e8-494d-8798-f030d8608153',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fkleebg.jpg?alt=media&token=5ca6be23-fe69-44d5-88ec-bffd06f1261b',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fraidenbg.jpg?alt=media&token=02e1c977-ea91-4e53-a260-ab6bf2d47809',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fxianzhoubg.png?alt=media&token=86740938-c705-4898-b6e7-8db68c221ed3',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fyaebg.jpg?alt=media&token=3cba46b0-b0db-46e6-b1dd-e40e8c798efd',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fbronya.png?alt=media&token=cced8832-7d79-4932-8d27-ff490ca1cce8',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fhimeko.png?alt=media&token=e0dba787-1145-4671-abc0-4d2319bb42cd',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fhoyo1.gif?alt=media&token=bdbdd287-1831-4cd8-9d75-89818c609f90',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fjingyuan.png?alt=media&token=fec6d093-8915-4245-bedc-ab3e747bde24',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fkafka.png?alt=media&token=477fd030-732d-4238-afd6-e97b19789d56',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fm7.png?alt=media&token=f160fa22-cfa1-4e7b-b0b0-c975477f8d1f',
+  'https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/background_image%2Fpoum.png?alt=media&token=aa82b117-2884-43eb-ad40-c22b6f34738f',
+];

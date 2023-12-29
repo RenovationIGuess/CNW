@@ -1,0 +1,434 @@
+/* exported gapiLoaded */
+/* exported gisLoaded */
+/* exported handleAuthClick */
+/* exported handleSignoutClick */
+
+// TODO(developer): Set to client ID and API key from the Developer Console
+const CLIENT_ID =
+  "463336716894-r2tco53sffsetur8tfhq0c843daup8ng.apps.googleusercontent.com";
+const API_KEY = "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";
+
+// Discovery doc URL for APIs used by the quickstart
+const DISCOVERY_DOC =
+  "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest";
+
+// Authorization scopes required by the API; multiple scopes can be
+// included, separated by spaces.
+const SCOPES = "https://www.googleapis.com/auth/gmail.modify";
+
+let tokenClient;
+let gapiInited = false;
+let gisInited = false;
+
+document.getElementById("authorize_button").style.visibility = "hidden";
+document.getElementById("signout_button").style.visibility = "hidden";
+document.getElementById("main").style.visibility = "hidden";
+
+/**
+ * Callback after api.js is loaded.
+ */
+function gapiLoaded() {
+  gapi.load("client", initializeGapiClient);
+}
+
+/**
+ * Callback after the API client is loaded. Loads the
+ * discovery doc to initialize the API.
+ */
+async function initializeGapiClient() {
+  await gapi.client.init({
+    apiKey: API_KEY,
+    discoveryDocs: [DISCOVERY_DOC],
+  });
+  gapiInited = true;
+  maybeEnableButtons();
+}
+
+/**
+ * Callback after Google Identity Services are loaded.
+ */
+function gisLoaded() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: "", // defined later
+  });
+  gisInited = true;
+  maybeEnableButtons();
+}
+
+/**
+ * Enables user interaction after all libraries are loaded.
+ */
+function maybeEnableButtons() {
+  if (gapiInited && gisInited) {
+    document.getElementById("authorize_button").style.visibility = "visible";
+  }
+}
+
+/**
+ *  Sign in the user upon button click.
+ */
+function handleAuthClick() {
+  tokenClient.callback = async (resp) => {
+    if (resp.error !== undefined) {
+      throw resp;
+    }
+    document.getElementById("signout_button").style.visibility = "visible";
+    document.getElementById("test").innerHTML = "";
+    document.getElementById("main").style.visibility = "visible";
+    document.getElementById("authorize_button").innerText =
+      "Chuyển đổi tài khoản";
+    await listTitle();
+  };
+
+  if (gapi.client.getToken() === null) {
+    // Prompt the user to select a Google Account and ask for consent to share their data
+    // when establishing a new session.
+    tokenClient.requestAccessToken({ prompt: "consent" });
+  } else {
+    // Skip display of account chooser and consent dialog for an existing session.
+    tokenClient.requestAccessToken({ prompt: "" });
+  }
+}
+
+/**
+ *  Sign out the user upon button click.
+ */
+function handleSignoutClick() {
+  const token = gapi.client.getToken();
+  if (token !== null) {
+    google.accounts.oauth2.revoke(token.access_token);
+    gapi.client.setToken("");
+    document.getElementById("content").innerText = "";
+    document.getElementById("authorize_button").innerText =
+      "Đăng nhập Bằng Gmail";
+    document.getElementById("signout_button").style.visibility = "hidden";
+    document.getElementById("main").style.visibility = "hidden";
+  }
+}
+
+/**
+ * Lists the titles of the user's emails.
+ */
+function listTitle() {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "https://www.googleapis.com/gmail/v1/users/me/messages");
+  xhr.setRequestHeader(
+    "Authorization",
+    "Bearer " + gapi.auth.getToken().access_token,
+  );
+  xhr.onload = async function () {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      const emails = response.messages;
+      if (!emails || emails.length === 0) {
+        console.log("No emails found.");
+        return;
+      }
+      const emailIDs = emails.map((email) => email.id);
+      const emailContents = await getEmailContents(emailIDs);
+      const emailDicts = emailContents.map((email) => {
+        const header = email.payload.headers.find(
+          (header) => header.name === "Subject",
+        );
+        const title = header ? header.value : "";
+        const body = email.snippet;
+        return { title, body };
+      });
+      const testElement = document.getElementById("test");
+      emailDicts.forEach((emailDict) => {
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("css-list");
+        newDiv.innerHTML = emailDict.title;
+
+        const newBody = document.createElement("div");
+        newBody.innerHTML = emailDict.body;
+        newDiv.appendChild(newBody);
+        testElement.appendChild(newDiv);
+        newBody.style.display = "none";
+        newDiv.addEventListener("click", () => {
+          if (newBody.style.display === "none") {
+            newBody.style.display = "block";
+          } else {
+            newBody.style.display = "none";
+          }
+        });
+      });
+    } else {
+      console.error("Error retrieving emails:", xhr.status, xhr.statusText);
+    }
+  };
+  xhr.send();
+}
+
+async function getEmailContents(emailIDs) {
+  const emailContents = [];
+  for (let i = 0; i < emailIDs.length; i++) {
+    const emailId = emailIDs[i];
+    const content = await getEmailContent(emailId);
+    emailContents.push(content);
+  }
+  return emailContents;
+}
+
+function getEmailContent(emailId) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "GET",
+      `https://www.googleapis.com/gmail/v1/users/me/messages/${emailId}?format=full`,
+    );
+    xhr.setRequestHeader(
+      "Authorization",
+      "Bearer " + gapi.auth.getToken().access_token,
+    );
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        resolve(response);
+      } else {
+        reject(
+          new Error("Error retrieving email:", xhr.status, xhr.statusText),
+        );
+      }
+    };
+
+    xhr.send();
+  });
+}
+
+/**
+ * Create a draft email.
+ */
+document
+  .getElementById("email_form2")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const email = {
+      to: document.getElementById("to2").value,
+      subject: document.getElementById("subject2").value,
+      body: document.getElementById("body2").value,
+    };
+
+    createEmail(email);
+  });
+
+async function createEmail(email) {
+  const fromEmail = await getEmailAddress();
+  const accessToken = gapi.auth.getToken().access_token;
+
+  const fileInput = document.getElementById("file2");
+  const file = fileInput.files[0];
+  if (file) {
+    createMessageWithAttachment(file, email, accessToken);
+  } else {
+    const base64EncodedEmail = btoa(
+      `From: ${fromEmail}\r\n` +
+        `To: ${email.to}\r\n` +
+        `Subject: ${email.subject}\r\n\r\n` +
+        `${email.body}`,
+    );
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://gmail.googleapis.com/gmail/v1/users/me/drafts");
+    xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        document.getElementById("email_form2").reset();
+        alert("Create successfully!");
+      } else {
+        console.error("Error sending email:", xhr.status, xhr.statusText);
+        console.log(xhr.responseText);
+      }
+    };
+    xhr.send(
+      JSON.stringify({
+        message: {
+          raw: base64EncodedEmail,
+        },
+      }),
+    );
+  }
+}
+
+function createMessageWithAttachment(file, email, accessToken) {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function () {
+    const base64Data = reader.result.split(",")[1];
+    const boundary = "MY_BOUNDARY";
+
+    const message = [
+      'Content-Type: multipart/mixed; boundary="' + boundary + '"',
+      "MIME-Version: 1.0",
+      "to: " + email.to,
+      "subject: " + email.subject,
+      "",
+      "--" + boundary,
+      'Content-Type: text/plain; charset="UTF-8"',
+      "MIME-Version: 1.0",
+      "Content-Transfer-Encoding: 7bit",
+      "",
+      email.body,
+      "",
+      "--" + boundary,
+      "Content-Type: " + file.type,
+      "MIME-Version: 1.0",
+      "Content-Transfer-Encoding: base64",
+      'Content-Disposition: attachment; filename="' + file.name + '"',
+      "",
+      base64Data,
+      "--" + boundary + "--",
+    ].join("\r\n");
+
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "POST",
+      "https://gmail.googleapis.com/upload/gmail/v1/users/me/drafts",
+    );
+    xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+    xhr.setRequestHeader("Content-Type", "message/rfc822");
+    xhr.onload = function () {
+      document.getElementById("email_form2").reset();
+      alert("Create successfully!");
+    };
+    xhr.onerror = function () {
+      document.getElementById("email_form2").reset();
+      alert("Create successfully!");
+    };
+    xhr.send(message);
+  };
+}
+
+/**
+ * Send an email
+ */
+
+document
+  .getElementById("email_form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const email = {
+      to: document.getElementById("to").value,
+      subject: document.getElementById("subject").value,
+      body: document.getElementById("body").value,
+    };
+
+    sendEmail(email);
+  });
+async function sendEmail(email) {
+  const fromEmail = await getEmailAddress();
+  const accessToken = gapi.auth.getToken().access_token;
+
+  const createMessageWithAttachment = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      const base64Data = reader.result.split(",")[1];
+      const boundary = "MY_BOUNDARY";
+
+      const message = [
+        'Content-Type: multipart/mixed; boundary="' + boundary + '"',
+        "MIME-Version: 1.0",
+        "to: " + email.to,
+        "subject: " + email.subject,
+        "",
+        "--" + boundary,
+        'Content-Type: text/plain; charset="UTF-8"',
+        "MIME-Version: 1.0",
+        "Content-Transfer-Encoding: 7bit",
+        "",
+        email.body,
+        "",
+        "--" + boundary,
+        "Content-Type: " + file.type,
+        "MIME-Version: 1.0",
+        "Content-Transfer-Encoding: base64",
+        'Content-Disposition: attachment; filename="' + file.name + '"',
+        "",
+        base64Data,
+        "--" + boundary + "--",
+      ].join("\r\n");
+
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "POST",
+        "https://www.googleapis.com/upload/gmail/v1/users/me/messages/send",
+      );
+      xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+      xhr.setRequestHeader("Content-Type", "message/rfc822");
+      xhr.onload = function () {
+        document.getElementById("email_form").reset();
+        alert("Email sent successfully!");
+      };
+      xhr.onerror = function () {
+        document.getElementById("email_form").reset();
+        alert("Email sent successfully!");
+      };
+      xhr.send(message);
+    };
+  };
+
+  const fileInput = document.getElementById("file");
+  const file = fileInput.files[0];
+  if (file) {
+    createMessageWithAttachment(file);
+  } else {
+    const base64EncodedEmail = btoa(
+      `From: ${fromEmail}\r\n` +
+        `To: ${email.to}\r\n` +
+        `Subject: ${email.subject}\r\n\r\n` +
+        `${email.body}`,
+    );
+
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "POST",
+      "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+    );
+    xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        document.getElementById("email_form").reset();
+        alert("Email sent successfully!");
+      } else {
+        console.error("Error sending email:", xhr.status, xhr.statusText);
+      }
+    };
+    xhr.send(
+      JSON.stringify({
+        raw: base64EncodedEmail,
+      }),
+    );
+  }
+}
+
+async function getEmailAddress() {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://gmail.googleapis.com/gmail/v1/users/me/profile");
+    xhr.setRequestHeader(
+      "Authorization",
+      "Bearer " + gapi.auth.getToken().access_token,
+    );
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        const email = response.emailAddress;
+        resolve(email);
+      } else {
+        reject(new Error("Error retrieving email: " + xhr.status));
+      }
+    };
+    xhr.onerror = function () {
+      reject(new Error("Network error occurred"));
+    };
+    xhr.send();
+  });
+}

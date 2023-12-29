@@ -1,0 +1,87 @@
+.avatar-modal-container {
+  width: 608px !important;
+}
+
+.avatar-modal-body {
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--default-border-color);
+  border-bottom: 1px solid var(--default-border-color);
+  margin-top: 12px;
+  margin-bottom: 8px;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.avatar-selector__current {
+  padding: 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-selector__container {
+  padding: 0 16px;
+  margin-right: -24px;
+  max-height: 408px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.avatar-selector__item {
+  display: inline-block;
+  vertical-align: top;
+  width: 88px;
+  height: 88px;
+  margin: 16px 53px 0 0;
+  border-radius: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.avatar-selector__item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  border: 6px solid var(--default-darker-border-color);
+}
+
+.avatar-selector__item--active::after {
+  content: '';
+  position: absolute;
+  border: 2px solid #657ef8;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 100%;
+}
+
+.avatar-selector__item:nth-child(1),
+.avatar-selector__item:nth-child(2),
+.avatar-selector__item:nth-child(3),
+.avatar-selector__item:nth-child(4) {
+  margin-top: 0;
+}
+
+// .avatar-selector__item:nth-child(4) {
+//   margin-right: 0;
+// }
+
+.avatar-selector__item:nth-of-type(4n) {
+  margin-right: 0;
+}
+
+.account-avatar-delete-btn {
+  position: absolute;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  right: 0;
+  cursor: pointer;
+}
+
+.account-avatar-delete-btn img {
+  width: 100%;
+  height: 100%;
+}

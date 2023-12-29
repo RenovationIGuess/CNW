@@ -1,0 +1,15 @@
+.tab-underline {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 4px;
+  background: #657ef8;
+  border-radius: 2px;
+  width: calc(var(--ind-width) * 1px);
+  transform: translateX(calc(var(--ind-x) * 1px));
+  will-change: transform, width;
+  transition: transform 0.6s, width 0.4s;
+  overflow: hidden;
+  display: flex;
+}

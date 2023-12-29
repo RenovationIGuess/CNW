@@ -1,0 +1,28 @@
+.note-icon__wrapper {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #657ef8;
+  margin-bottom: 16px;
+}
+
+.note-item .load-more__loader {
+  width: 56px;
+  height: 56px;
+  border: 6px solid transparent;
+  border-top: 6px solid #657ef8;
+  border-right: 6px solid #657ef8;
+  margin-bottom: 16px;
+}
+
+.load-more__bg {
+  background-color: #f8f8f8;
+}
+
+.load-more__title {
+  font-weight: 700;
+  color: var(--default-dark-color-45);
+}

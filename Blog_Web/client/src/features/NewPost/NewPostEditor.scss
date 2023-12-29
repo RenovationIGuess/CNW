@@ -1,0 +1,190 @@
+.copyright-settings-title {
+  color: var(--patch-font-color-new);
+  margin-bottom: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  .form-item-container__label {
+    margin-bottom: 0;
+  }
+
+  .icon {
+    font-size: 16px;
+    // transform: translate(0, 1px);
+    margin-left: 8px;
+    color: var(--default-icon-color);
+    line-height: 1;
+  }
+}
+
+.copyright-settings-original-radio {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.newpost-radio {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  // -webkit-box-align: center;
+  // -ms-flex-align: center;
+  // align-items: center;
+  cursor: pointer;
+}
+
+.radio-icon-checked {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  font-size: 20px;
+  fill: currentColor;
+  overflow: hidden;
+  line-height: 1;
+  color: #657ef8;
+}
+
+.radio-icon-unchecked {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--default-icon-color);
+  line-height: 1;
+}
+
+.copyright-settings-original-radio-name {
+  color: var(--patch-font-color-new);
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.copyright-settings-original-radio-option {
+  margin-top: 8px;
+
+  .copyright-input {
+    width: 400px;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 400;
+    position: relative;
+    line-height: 20px;
+  }
+
+  .input-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--default-border-color);
+    border-radius: 8px;
+    position: relative;
+    height: 100%;
+    background: var(--default-background-color-disabled);
+
+    input {
+      padding: 0 16px !important;
+      color: var(--patch-font-color-new);
+      display: -webkit-box;
+      overflow: hidden;
+      -o-text-overflow: ellipsis;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      line-height: 40px;
+      max-height: 40px;
+      word-break: break-all;
+      position: relative;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      z-index: 2;
+      border: none;
+      background-color: transparent;
+      font-size: inherit;
+      height: 100%;
+    }
+
+    .paste-icon {
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 40px;
+      margin-right: 16px;
+      color: var(--default-icon-color);
+    }
+  }
+
+  .input-container--focus {
+    border-color: #657ef8;
+  }
+
+  .input-container--error {
+    border-color: var(--error-color);
+  }
+}
+
+.select-option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  .newpost-select {
+    background: var(--lighter-gray-color);
+    height: 40px;
+    width: 400px;
+    border: 1px solid var(--default-border-color);
+    border-radius: 8px;
+    position: relative;
+
+    .newpost-select__container {
+      padding: 0 16px;
+      cursor: default;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+
+      .newpost-select-label {
+        line-height: 20px;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+
+        .newpost-select__placeholder {
+          font-size: 14px;
+          color: var(--darker-gray-color-new);
+        }
+      }
+    }
+  }
+
+  .notice {
+    font-size: 16px;
+    margin-left: 8px;
+    color: var(--default-icon-color);
+  }
+}

@@ -1,0 +1,49 @@
+.mouse__scroll {
+  opacity: 1;
+  position: absolute;
+  z-index: 15;
+  bottom: 1rem;
+  right: 1.5rem;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.scrolled {
+  opacity: 0;
+}
+
+.mouse__scroll-line {
+  overflow: hidden;
+  margin-top: 4px;
+  width: 1px;
+  height: 72px;
+
+  &::after {
+    content: '';
+    display: block;
+    background: #fff;
+    animation: line-move 2s 0s infinite;
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes line-move {
+    0% {
+      transform: translateY(-100%);
+    }
+    50% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+}
+
+.mouse__scroll-logo {
+  font-size: 1.5rem;
+  color: #fff;
+}
