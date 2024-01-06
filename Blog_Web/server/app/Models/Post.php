@@ -70,12 +70,6 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    // A post can attach many notes
-    public function notes()
-    {
-        return $this->hasMany(Note::class);
-    }
-
     // A post can have many comments
     public function comments()
     {

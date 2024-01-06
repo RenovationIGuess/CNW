@@ -1,5 +1,3 @@
-import liyueBg from '../assets/liyue.jpg';
-import waifuHuntLogo from '../assets/logoweb.png';
 import nfclogo from '../assets/nfclogo.png';
 import blacknfc from '../assets/blacknfc.png';
 import paiwow from '../assets/Paiwow.png';
@@ -59,8 +57,10 @@ import facebook from '../assets/icons/facebook.png';
 import apple from '../assets/icons/apple.png';
 import github from '../assets/icons/github-mark.png';
 
+// Hoyolab mascot
 import find_what from '../assets/hoyo/find_what.png';
 import whats_there from '../assets/hoyo/whats_there.png';
+import no_comment from '~/assets/hoyo/no_comment.png';
 
 import glow1 from '../assets/glow1.png';
 
@@ -78,6 +78,20 @@ import yaebg from '../assets/hoyo/background/yaebg.jpg';
 import kleebg from '../assets/hoyo/background/kleebg.jpg';
 import raidenbg from '../assets/hoyo/background/raidenbg.jpg';
 import xianzhoubg from '../assets/hoyo/background/xianzhoubg.png';
+
+// Decorations
+import item_bg1 from '../assets/hoyo/item_bg1.png';
+import item_bg2 from '../assets/hoyo/item_bg2.png';
+import item_bg3 from '../assets/hoyo/item_bg3.png';
+import item_bg4 from '../assets/hoyo/item_bg4.png';
+import item_bg5 from '../assets/hoyo/item_bg5.png';
+
+import hsr_train from '../assets/hoyo/hsr_train.png';
+import decor_mondo from '../assets/hoyo/decor_mondo.png';
+import decor_inazuma from '../assets/hoyo/decor_inazuma.png';
+import busy_poum from '../assets/hoyo/busy_poum.png';
+import celeb_paimon from '../assets/hoyo/celeb_paimon.png';
+import noisy_noti from '../assets/hoyo/noisy_noti.png';
 
 import temp_img from '../assets/hoyo/temp_img.png';
 
@@ -112,6 +126,7 @@ import poum_emoji4 from '../assets/hoyo/emoji/poum/poum4.png';
 import poum_emoji5 from '../assets/hoyo/emoji/poum/poum5.png';
 import poum_emoji6 from '../assets/hoyo/emoji/poum/poum6.png';
 import poum_emoji7 from '../assets/hoyo/emoji/poum/poum7.png';
+import poum_find from '../assets/hoyo/poum_find.png';
 
 // Notifications
 import clean from '../assets/hoyo/noti/clean.png';
@@ -138,8 +153,6 @@ import create from '~/assets/hoyo/create.png';
 import no_image from '~/assets/no_image.png';
 
 export default {
-  liyueBg,
-  waifuHuntLogo,
   starBg1,
   starBg2,
   starBg3,
@@ -242,4 +255,17 @@ export default {
   find_what,
   whats_there,
   temp_img,
+  no_comment,
+  item_bg1,
+  item_bg2,
+  item_bg3,
+  item_bg4,
+  item_bg5,
+  hsr_train,
+  decor_mondo,
+  decor_inazuma,
+  busy_poum,
+  celeb_paimon,
+  noisy_noti,
+  poum_find,
 };

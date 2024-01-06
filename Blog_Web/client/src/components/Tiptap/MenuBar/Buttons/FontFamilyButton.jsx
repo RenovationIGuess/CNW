@@ -1,20 +1,10 @@
-import { Tooltip } from 'antd';
+import { Popover, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import { RiArrowDownSFill } from 'react-icons/ri';
-import useComponentVisible from '~/hooks/useComponentVisible';
-
-const fontFamilyArray = [
-  'Roboto',
-  'Inter',
-  'Comic Sans MS, Comic Sans',
-  'serif',
-  'monospace',
-  'cursive',
-];
+import FontFamilyPopover from '../../Popovers/FontFamilyPopover';
 
 const FontFamilyButton = ({ editor }) => {
-  const [toolbarFFRef, isToolbarFFVisible, setToolbarFFVisible] =
-    useComponentVisible(false, 'toolbar-font-family');
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   // Font family
   const [fontFamily, setFontFamily] = useState('Roboto');
@@ -22,49 +12,38 @@ const FontFamilyButton = ({ editor }) => {
   return (
     <>
       <div className="toolbar-item toolbar-font-family">
-        <Tooltip placement="top" title={'Change font'} arrow={false}>
-          <div
-            className="editor-font-family-container"
-            ref={toolbarFFRef}
-            onClick={() => setToolbarFFVisible((prev) => !prev)}
-          >
-            <div className="font-name">{fontFamily}</div>
-            <RiArrowDownSFill
-              className={
-                isToolbarFFVisible
-                  ? 'font-menu-arrow font-menu-arrow--active'
-                  : 'font-menu-arrow'
-              }
+        <Popover
+          rootClassName="custom-popover"
+          placement="bottomLeft"
+          arrow={false}
+          trigger="click"
+          open={popoverOpen}
+          onOpenChange={() => setPopoverOpen(!popoverOpen)}
+          content={
+            <FontFamilyPopover
+              editor={editor}
+              setPopoverOpen={setPopoverOpen}
+              setFontFamily={setFontFamily}
             />
-          </div>
-        </Tooltip>
-        {isToolbarFFVisible && (
-          <div
-            className="toolbar-list editor-tool-popup"
-            style={{ width: 150 }}
-          >
-            {fontFamilyArray.map((font, index) => (
-              <span
-                key={index}
-                onClick={() => {
-                  font === 'Roboto'
-                    ? editor.chain().focus().unsetFontFamily().run()
-                    : editor.chain().focus().setFontFamily(font).run();
-                  // setFontFamily(font);
-                  setToolbarFFVisible(false);
-                }}
+          }
+        >
+          <Tooltip placement="top" title={fontFamily} arrow={false}>
+            <div className="editor-font-family-container">
+              <div className="font-name">
+                {fontFamily.length > 10
+                  ? fontFamily.slice(0, 10) + '...'
+                  : fontFamily}
+              </div>
+              <RiArrowDownSFill
                 className={
-                  editor.isActive('textStyle', { fontFamily: font })
-                    ? 'toolbar-list__item toolbar-list__item--active'
-                    : 'toolbar-list__item'
+                  popoverOpen
+                    ? 'font-menu-arrow font-menu-arrow--active'
+                    : 'font-menu-arrow'
                 }
-                style={{ fontFamily: font }}
-              >
-                {font.length > 10 ? font.slice(0, 10) + '...' : font}
-              </span>
-            ))}
-          </div>
-        )}
+              />
+            </div>
+          </Tooltip>
+        </Popover>
       </div>
     </>
   );

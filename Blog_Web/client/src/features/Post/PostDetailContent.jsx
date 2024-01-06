@@ -15,12 +15,7 @@ const PostDetailContent = ({
     <div className="post-skeleton">
       <div>
         <div className="post-page__body">
-          <PostDetailSection
-            post={post}
-            setPost={setPost}
-            commentsNumber={comments.length}
-            fetchPostLoading={fetchPostLoading}
-          />
+          <PostDetailSection />
           <PostInteractSection
             postId={post.id}
             posterId={post.poster.id}

@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { userStateContext } from '~/contexts/ContextProvider';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import './DashboardLayout.scss';
 import axiosClient from '~/axios';
 import { ToastContainer } from 'react-toastify';
 import Sidebar from '~/components/Sidebar/Sidebar';
-import useSidebarStore from '~/store/useSidebarStore';
 import ActionNotiToast from '~/components/ActionNotiToast';
 import ActionNotiToastBottom from '~/components/ActionNotiToastBottom';
 import ConfirmModal from '~/components/ConfirmModal/ConfirmModal';
 import useModalStore from '~/store/useModalStore';
-import DirectoryModal from '~/features/Directory/DirectoryModal';
 import { objUtils } from '~/utils';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Toaster } from 'sonner';
 import SidebarSkeleton from '~/components/Sidebar/SidebarSkeleton';
 
@@ -44,15 +40,6 @@ const DashboardLayout = () => {
     state.confirmModalLoading,
   ]);
 
-  const [setPrivateItems] = useSidebarStore((state) => [state.setPrivateItems]);
-
-  const [setPublicItems] = useSidebarStore((state) => [state.setPublicItems]);
-
-  const [directoryModalOpen, setDirectoryModalOpen] = useModalStore((state) => [
-    state.directoryModalOpen,
-    state.setDirectoryModalOpen,
-  ]);
-
   useEffect(() => {
     if (userToken) {
       setFetchingUser(true);
@@ -65,24 +52,6 @@ const DashboardLayout = () => {
           } else {
             const userInfo = data.data;
             setCurrentUser(userInfo);
-
-            const newPrivateItems = {
-              [userInfo.private_dir.id]: {
-                ...userInfo.private_dir,
-                child_items: [...userInfo.private_dir.child_items],
-                loading: false,
-              },
-            };
-            setPrivateItems(newPrivateItems);
-
-            const newPublicItems = {
-              [userInfo.public_dir.id]: {
-                ...userInfo.public_dir,
-                child_items: [...userInfo.public_dir.child_items],
-                loading: false,
-              },
-            };
-            setPublicItems(newPublicItems);
           }
         })
         .catch((err) => {
@@ -126,7 +95,7 @@ const DashboardLayout = () => {
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <>
       <div className="app__container h-screen overflow-hidden min-h-0 relative flex">
         <Sidebar />
         <Outlet
@@ -140,13 +109,6 @@ const DashboardLayout = () => {
           theme="light"
           closeButton={true}
           richColors
-        />
-
-        {/* <NewNoteModal /> */}
-
-        <DirectoryModal
-          dirModalOpen={directoryModalOpen}
-          setDirModalOpen={setDirectoryModalOpen}
         />
 
         {/* Modal aka Popups */}
@@ -164,11 +126,12 @@ const DashboardLayout = () => {
           confirmTitle={confirmModalInfo.title}
           confirmMessage={confirmModalInfo.message}
           confirmModalOpen={confirmModalOpen}
-          callback={confirmModalInfo.callback}
+          confirmCallback={confirmModalInfo.confirmCallback}
+          cancelCallback={confirmModalInfo.cancelCallback}
           setConfirmModalOpen={setConfirmModalOpen}
         />
       </div>
-    </DndProvider>
+    </>
   );
 };
 

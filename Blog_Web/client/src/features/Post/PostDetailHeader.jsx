@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import PostActions from './PostActions';
 import { Popover } from 'antd';
+import usePostStore from '~/store/usePostStore';
 
-const PostDetailHeader = ({ post }) => {
+const PostDetailHeader = ({}) => {
+  const [post] = usePostStore((state) => [state.post]);
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
@@ -15,7 +17,7 @@ const PostDetailHeader = ({ post }) => {
               <div className="post-page-header__left">
                 <div className="post-title-container">
                   <span className="post-page-header__title">
-                    Blog Detail's Page
+                    Post Detail's Page
                   </span>
                 </div>
               </div>

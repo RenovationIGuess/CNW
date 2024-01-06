@@ -9,19 +9,21 @@ const ConfirmModal = ({
   confirmMessage,
   confirmModalOpen,
   setConfirmModalOpen,
-  callback,
+  confirmCallback,
+  cancelCallback,
 }) => {
   // Do not show anymore
   const [checked, setChecked] = useState(false);
 
   const handleCancel = () => {
+    cancelCallback();
     setConfirmModalOpen(!confirmModalOpen);
   };
 
   const handleConfirm = () => {
     // setConfirmModalOpen(!confirmModalOpen);
     setTimeout(() => {
-      callback();
+      confirmCallback();
     }, 0);
   };
 

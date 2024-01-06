@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NewPostTiptap from '~/components/Tiptap/NewPostTiptap/NewPostTiptap';
 import useComponentVisible from '~/hooks/useComponentVisible';
 import './NewPostEditor.scss';
 import CopyrightSection from './CopyrightSection';
 import AttachBanner from './AttachBanner';
-import AttachModels from './AttachModels';
 import { cn } from '~/utils';
 
 const NewPostEditor = ({ post, setPost, errors }) => {
@@ -68,7 +67,6 @@ const NewPostEditor = ({ post, setPost, errors }) => {
             </p>
           ))}
       </div>
-      <AttachModels />
       <CopyrightSection />
     </div>
   );

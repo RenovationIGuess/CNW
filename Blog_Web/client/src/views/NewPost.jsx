@@ -76,7 +76,7 @@ const NewPost = () => {
               <div className="social-new-post">
                 <div className="social-new-richtext-post">
                   <div className="social-new-post__header">
-                    <h1>Post</h1>
+                    <h1>Blog</h1>
                     <div></div>
                   </div>
                   <NewPostEditor

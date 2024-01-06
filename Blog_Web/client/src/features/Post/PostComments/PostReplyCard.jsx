@@ -13,45 +13,46 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import TiptapReply from '~/components/Tiptap/TiptapReply';
 import axiosClient from '~/axios';
-import { stringUtils } from '~/utils';
+import { cn, stringUtils } from '~/utils';
 import MoreActions from './MoreActions';
-import { userStateContext } from '~/contexts/ContextProvider';
+import usePostStore from '~/store/usePostStore';
+import { toast } from 'sonner';
 dayjs.extend(relativeTime);
 
 const PostReplyCard = ({
+  reply,
   replyIndex,
   cioIndex,
   commentIndex,
-  reply,
-  comments,
-  setComments,
-  postId,
   commentId,
-  inputContent,
-  setInputContent,
-  commentInputOpen,
-  setCommentInputOpen,
-  handleOpenReplyInput,
-  posterId,
   commentorId,
-  sendReplyLoading,
-  handleSendReply,
 }) => {
-  const { currentUser } = userStateContext();
-
+  const [post] = usePostStore((state) => [state.post]);
+  const [comments, setComments] = usePostStore((state) => [
+    state.comments,
+    state.setComments,
+  ]);
+  const [setReplyToId] = usePostStore((state) => [state.setReplyToId]);
+  const [openCommentInput] = usePostStore((state) => [state.openCommentInput]);
+  const [commentInputOpen] = usePostStore((state) => [state.commentInputOpen]);
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [editState, setEditState] = useState(false);
 
   const handleVoteReply = (payload) => {
     axiosClient
-      .patch(`/posts/${postId}/comments/${reply.id}/like`, payload)
+      .patch(`/posts/${post.id}/comments/${reply.id}/like`, payload)
       .then(({ data }) => {
         comments[commentIndex].replies[replyIndex] = {
           ...data.data,
         };
         setComments([...comments]);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        toast.error('Server Error!', {
+          position: 'bottom-center',
+          duration: 3000,
+        });
+      })
       .finally(() => {});
   };
 
@@ -59,30 +60,28 @@ const PostReplyCard = ({
     <>
       <div className="comment-card-inner-reply">
         <div className="comment-card-inner-reply__body">
-          <Link
-            to={`/profile/${reply.commentor.id}/public`}
-            className="comment-card-inner-reply__user"
-          >
-            <div className="user-avatar__mini">
+          <div className="comment-card-inner-reply__user">
+            <Link
+              to={`/profile/${reply.commentor.id}/public`}
+              className="user-avatar__mini"
+            >
               <img
                 src={reply.commentor.profile.avatar}
                 alt="replier-avatar"
                 className="user-avatar__img"
               />
-            </div>
-            <Link
-              to={`/profile/${reply.commentor.id}/public`}
-              className="comment-card-inner-reply__name"
-            >
-              <span className="account-title__name">
+            </Link>
+            <div className="comment-card-inner-reply__name">
+              <Link
+                to={`/profile/${reply.commentor.id}/public`}
+                className="account-title__name"
+              >
                 {reply.commentor.profile.name}
+              </Link>
+              <span className="account-title__landlord">
+                <AiFillCrown />
+                &nbsp;Author
               </span>
-              {currentUser.id === posterId && (
-                <span className="account-title__landlord">
-                  <AiFillCrown />
-                  &nbsp;Author
-                </span>
-              )}
               {reply.reply_to && (
                 <span className="reply-to">
                   Replied to{' '}
@@ -94,21 +93,27 @@ const PostReplyCard = ({
                   </Link>
                 </span>
               )}
-            </Link>
-          </Link>
-          {editState ? (
+            </div>
+          </div>
+          {commentInputOpen[cioIndex].edit_state ? (
             <TiptapReply
-              reply={reply}
-              editState={editState}
-              setEditState={setEditState}
+              initContent={reply.content_html}
+              commentId={commentId}
+              commentIndex={commentIndex}
+              crboIndex={cioIndex}
             />
           ) : (
             <ReplyContent reply={reply} />
           )}
         </div>
-        <div className="comment-card-inner-reply__bottom">
+        <div
+          className={cn(
+            'comment-card-inner-reply__bottom',
+            commentInputOpen[cioIndex].edit_state && 'mt-4'
+          )}
+        >
           <span className="comment-card-inner-reply__time">
-            {stringUtils.uppercaseStr(dayjs(reply.created_at).fromNow())}
+            {stringUtils.uppercaseStr(dayjs(reply.updated_at).fromNow())}
           </span>
           <div className="flex items-center">
             <div className="comment-card-inner-reply__actions">
@@ -122,19 +127,13 @@ const PostReplyCard = ({
                   content={
                     <MoreActions
                       type={'reply'}
-                      postId={postId}
-                      commentId={commentId}
-                      replyId={reply.id}
-                      commentIndex={commentIndex}
-                      comments={comments}
-                      setComments={setComments}
-                      commentInputOpen={commentInputOpen}
-                      setCommentInputOpen={setCommentInputOpen}
-                      setEditState={setEditState}
                       setPopoverOpen={setPopoverOpen}
-                      posterId={posterId}
+                      commentId={commentId}
+                      commentIndex={commentIndex}
                       commentorId={commentorId}
+                      replyId={reply.id}
                       replierId={reply.commentor.id}
+                      cioIndex={cioIndex}
                     />
                   }
                 >
@@ -145,12 +144,8 @@ const PostReplyCard = ({
             <div
               className="comment-card-operation-bottom__item"
               onClick={() => {
-                handleOpenReplyInput(cioIndex);
-                setInputContent({
-                  content_html: '',
-                  content_json: '',
-                  reply_to: reply.commentor.id,
-                });
+                openCommentInput(cioIndex);
+                setReplyToId(reply.commentor.id);
               }}
             >
               <AiOutlineComment className="comment-reply__icon" />
@@ -182,12 +177,9 @@ const PostReplyCard = ({
         </div>
         {commentInputOpen[cioIndex].state && (
           <TiptapReply
-            replyInputOpen={commentInputOpen[cioIndex].state}
+            commentId={commentId}
+            commentIndex={commentIndex}
             crboIndex={cioIndex}
-            sendReplyLoading={sendReplyLoading}
-            reply={inputContent}
-            setReply={setInputContent}
-            handleSendReply={handleSendReply}
           />
         )}
       </div>

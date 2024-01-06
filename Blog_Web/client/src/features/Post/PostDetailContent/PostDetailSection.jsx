@@ -10,38 +10,19 @@ import {
   AiOutlineStar,
 } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import axiosClient from '~/axios';
 import TiptapContent from '~/components/Tiptap/TiptapContent';
 import { images } from '~/constants';
 import { userStateContext } from '~/contexts/ContextProvider';
+import usePostStore from '~/store/usePostStore';
 
-const PostDetailSection = ({
-  post,
-  setPost,
-  commentsNumber,
-  fetchPostLoading,
-}) => {
+const PostDetailSection = ({}) => {
+  const [post] = usePostStore((state) => [state.post]);
+  const [comments] = usePostStore((state) => [state.comments]);
+  const [starPost, likePost] = usePostStore((state) => [
+    state.starPost,
+    state.likePost,
+  ]);
   const { currentUser } = userStateContext();
-
-  const handleStarPost = (payload) => {
-    axiosClient
-      .patch(`/posts/${post.id}/star`, payload)
-      .then(({ data }) => {
-        setPost(data.data);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {});
-  };
-
-  const handleLikePost = (payload) => {
-    axiosClient
-      .patch(`/posts/${post.id}/like`, payload)
-      .then(({ data }) => {
-        setPost(data.data);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {});
-  };
 
   return (
     <div className="post-page__main">
@@ -115,21 +96,21 @@ const PostDetailSection = ({
         <div className="post-page__auth">
           <div className="auth-type">
             <AiOutlineInfoCircle className="auth-icon" />
-            <span className="auth-type__label">Reblog allowed</span>
+            <span className="auth-type__label">Repost allowed</span>
           </div>
         </div>
         <div className="post-page-stats">
           <div className="post-page-stats__item">
             <div className="post-page-stats__icon">
               <AiOutlineComment className="icon" />
-              <span>{commentsNumber}</span>
+              <span>{comments.length}</span>
             </div>
           </div>
           <div className="post-page-stats__item">
             <div
               className="post-page-stats__icon"
               onClick={() =>
-                handleStarPost({ star: !post.current_user_interact.star })
+                starPost({ star: !post.current_user_interact.star })
               }
             >
               {post.current_user_interact.star ? (
@@ -144,7 +125,7 @@ const PostDetailSection = ({
             <div
               className="post-page-stats__icon"
               onClick={() =>
-                handleLikePost({ like: !post.current_user_interact.like })
+                likePost({ like: !post.current_user_interact.like })
               }
             >
               {post.current_user_interact.like ? (

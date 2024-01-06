@@ -1,6 +1,12 @@
 import React from 'react';
+import { cn } from '~/utils';
 
-const ModalFooter = ({ loading, handleCancel, handleConfirm }) => {
+const ModalFooter = ({
+  loading,
+  handleCancel,
+  handleConfirm,
+  disableConfirm = false,
+}) => {
   return (
     <footer className="flex items-center justify-center pt-1 pb-2">
       <button
@@ -11,7 +17,10 @@ const ModalFooter = ({ loading, handleCancel, handleConfirm }) => {
       </button>
       <button
         onClick={handleConfirm}
-        className="account-edit-btn account-edit-confirm-btn"
+        className={cn(
+          'account-edit-btn account-edit-confirm-btn',
+          disableConfirm && 'btn-disabled'
+        )}
       >
         {!loading ? (
           <>Confirm</>

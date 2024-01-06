@@ -18,7 +18,8 @@ const useModalStore = create((set) => ({
   confirmModalInfo: {
     title: '',
     message: '',
-    callback: () => {},
+    confirmCallback: () => {},
+    cancelCallback: () => {},
   },
   setConfirmModalInfo: (confirmModalInfo) => set({ confirmModalInfo }),
 

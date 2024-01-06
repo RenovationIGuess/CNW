@@ -57,13 +57,13 @@ const SocialPostCard = ({ post, postIndex }) => {
   return (
     <div className="social-post-card-wrapper">
       {/* When a user click I don't want to see this kind of post */}
-      {/* <div className="hide-post">
+      <div className="hide-post">
         <div className="post-card-hidden">
           <div className="post-card-hidden__content">
             <header>
               <AiFillEyeInvisible className="icon" />
               <p className="post-card-hidden__title">
-                This blog has been hidden
+                This post has been hidden
               </p>
               <p className="post-card-hidden__revocation">Undo</p>
             </header>
@@ -72,7 +72,7 @@ const SocialPostCard = ({ post, postIndex }) => {
             </p>
           </div>
         </div>
-      </div> */}
+      </div>
       <div className="social-post-card">
         {/* Header */}
         <div className="social-post-card__header">
@@ -142,7 +142,7 @@ const SocialPostCard = ({ post, postIndex }) => {
         <Link
           className="social-post-card__link"
           to={`/blogs/${post.id}`}
-          rel="noopener noreferrer"
+          // rel="noopener noreferrer"
         >
           <h3 className="social-post-card__title">
             <div className="social-post-card__type"></div>
@@ -162,9 +162,9 @@ const SocialPostCard = ({ post, postIndex }) => {
             <div className="social-post-card__data-item">
               <div className="post-interact">
                 <Link
-                  to={`/post/${post.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  to={`/blogs/${post.id}`}
+                  // target="_blank"
+                  // rel="noopener noreferrer"
                   className="social-router-link"
                 >
                   <AiOutlineComment className="icon" />

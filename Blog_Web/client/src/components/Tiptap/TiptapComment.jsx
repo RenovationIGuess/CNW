@@ -2,22 +2,34 @@ import { BubbleMenu, useEditor, EditorContent } from '@tiptap/react';
 import './Tiptap.scss';
 import CustomBubbleMenu from './BubbleMenu/CustomBubbleMenu';
 import { useEffect, useState } from 'react';
-import { BsEmojiSmile, BsFillImageFill } from 'react-icons/bs';
-import { MdOutlineAlternateEmail } from 'react-icons/md';
-import { AiOutlineLink } from 'react-icons/ai';
-import { Tooltip } from 'antd';
 import { handlePaste } from './utils/handlePaste';
 import { handleDrop } from './utils/handleDrop';
 import LinkBubbleMenu from './BubbleMenu/LinkBubbleMenu';
 import extensions from './extensions/tiptapExtension';
 import TableBubbleMenu from './BubbleMenu/TableBubbleMenu';
+import usePostStore from '~/store/usePostStore';
+import { cn, stringUtils } from '~/utils';
+import { userStateContext } from '~/contexts/ContextProvider';
+import TiptapCommentFooter from './TiptapCommentFooter';
 
-const TiptapComment = ({
-  sendCommentLoading,
-  comment,
-  setComment,
-  handleSendComment,
-}) => {
+// The init content will HTML type
+const TiptapComment = ({ initContent, cioIndex }) => {
+  const { currentUser } = userStateContext();
+
+  const [post] = usePostStore((state) => [state.post]);
+  const [commentInputOpen] = usePostStore((state) => [state.commentInputOpen]);
+  const [sendComment, sendCommentLoading] = usePostStore((state) => [
+    state.sendComment,
+    state.sendCommentLoading,
+  ]);
+  const [toggleEditComment, editComment, editCommentLoading] = usePostStore(
+    (state) => [
+      state.toggleEditComment,
+      state.editComment,
+      state.editCommentLoading,
+    ]
+  );
+
   const [linkContent, setLinkContent] = useState('');
   const [linkNodePos, setLinkNodePos] = useState({});
 
@@ -47,26 +59,26 @@ const TiptapComment = ({
           },
         },
       },
-      onUpdate({ editor }) {
-        setComment({
-          ...comment,
-          content_json: JSON.stringify(editor.getJSON()),
-          content_html: editor.getHTML(),
-        });
-      },
-      content: comment.content_html,
+      content: initContent,
     },
     []
   );
 
   useEffect(() => {
     if (!editor) return;
-    editor.commands.setContent('');
-  }, [sendCommentLoading]);
+    if (stringUtils.isContentEmpty(initContent)) {
+      editor.commands.setContent('');
+    } else editor.commands.setContent(initContent);
+  }, [sendCommentLoading, initContent]);
 
   return (
     <>
-      <div className="comment-container">
+      <div
+        className={cn(
+          'comment-container',
+          cioIndex != null && commentInputOpen[cioIndex].edit_state && 'mt-3'
+        )}
+      >
         {/* <MenuBar editor={editor} /> */}
         {editor && (
           <BubbleMenu
@@ -131,37 +143,56 @@ const TiptapComment = ({
         <EditorContent className="comment-content" editor={editor} />
       </div>
       <div className="comment-footer">
-        <div className="comment-footer__toolbar">
-          <Tooltip placement="bottom" title="Add emojis">
-            <BsEmojiSmile className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add images">
-            <BsFillImageFill className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add links">
-            <AiOutlineLink className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add mentions">
-            <MdOutlineAlternateEmail className="comment-tool__icon" />
-          </Tooltip>
-        </div>
-        <div>
+        <TiptapCommentFooter editor={editor} />
+        <div className="flex items-center">
+          {cioIndex != null && commentInputOpen[cioIndex].edit_state && (
+            <button
+              onClick={() => toggleEditComment(cioIndex)}
+              className="account-edit-btn account-edit-cancel-btn"
+            >
+              Cancel
+            </button>
+          )}
           <button
-            className={`send-button${
-              comment.content_html === '<p></p>' || comment.content_html === ''
-                ? ' send-button__disabled'
-                : ''
-            }`}
-            onClick={() =>
-              comment.content_html === '<p></p>' || comment.content_html === ''
-                ? {}
-                : handleSendComment()
-            }
+            className={cn(
+              'send-button',
+              editor &&
+                stringUtils.isContentEmpty(editor.getHTML(), 'html') &&
+                'send-button__disabled'
+            )}
+            onClick={() => {
+              if (
+                editor &&
+                !stringUtils.isContentEmpty(editor.getHTML(), 'html')
+              ) {
+                if (cioIndex != null && commentInputOpen[cioIndex].edit_state) {
+                  editComment(commentInputOpen[cioIndex].comment_id, {
+                    content_json: JSON.stringify(editor.getJSON()),
+                    content_html: editor.getHTML(),
+                  });
+                } else {
+                  sendComment({
+                    post_id: post.id,
+                    user_id: currentUser.id,
+                    post_comment_id: null,
+                    content_json: JSON.stringify(editor.getJSON()),
+                    content_html: editor.getHTML(),
+                    reply_to: null,
+                    pinned: false,
+                  });
+                }
+              }
+            }}
           >
-            {sendCommentLoading && (
+            {(sendCommentLoading ||
+              (initContent != null && editCommentLoading)) && (
               <span className="my-loader sm-send-comment__loader"></span>
             )}
-            <span>{sendCommentLoading ? 'Sending...' : 'Send'}</span>
+            <span>
+              {sendCommentLoading || (initContent != null && editCommentLoading)
+                ? 'Sending...'
+                : 'Send'}
+            </span>
           </button>
         </div>
       </div>

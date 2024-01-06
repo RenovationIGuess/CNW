@@ -1,49 +1,56 @@
 import { Modal, Popover } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import CommentContent from '~/components/Tiptap/CommentContent';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AiFillLike, AiOutlineComment, AiOutlineLike } from 'react-icons/ai';
-import { stringUtils } from '~/utils';
+import { cn, objUtils, stringUtils } from '~/utils';
 import TiptapReply from '~/components/Tiptap/TiptapReply';
 import { images } from '~/constants';
 import MoreActions from './MoreActions';
 import PostReplyCard from './PostReplyCard';
 import Liked from '~/components/Actions/Liked';
+import usePostStore from '~/store/usePostStore';
+import TiptapComment from '~/components/Tiptap/TiptapComment';
 dayjs.extend(relativeTime);
 
 const AllCommentReplies = ({
-  postId,
-  posterId,
-  commentorId,
   comment,
   commentIndex,
   cioIndex,
-  comments,
-  setComments,
-  inputContent,
-  setInputContent,
-  commentInputOpen,
-  setCommentInputOpen,
-  handleOpenCommentInput,
-  handleOpenReplyInput,
-  allRepliesShown,
-  setAllRepliesShown,
-  handleVoteComment,
-  handleSendReply,
-  sendReplyLoading,
+  open,
+  setOpen,
 }) => {
+  const [allRepliesShown, setAllRepliesShown] = usePostStore((state) => [
+    state.allRepliesShown,
+    state.setAllRepliesShown,
+  ]);
+  const [selectedComment] = usePostStore((state) => [state.selectedComment]);
+
+  const [commentInputOpen] = usePostStore((state) => [state.commentInputOpen]);
+  const [setReplyToId] = usePostStore((state) => [state.setReplyToId]);
+  const [openCommentInput] = usePostStore((state) => [state.openCommentInput]);
+
   const [popoverOpen, setPopoverOpen] = useState(false);
+
+  useEffect(() => {
+    if (allRepliesShown && !objUtils.isEmptyObject(selectedComment)) {
+      setOpen(true);
+      setAllRepliesShown(false);
+    }
+  }, [selectedComment, allRepliesShown]);
+
+  if (objUtils.isEmptyObject(selectedComment)) return <></>;
 
   return (
     <Modal
       width={680}
       centered
-      open={allRepliesShown}
+      open={open}
       onCancel={() => {
-        setAllRepliesShown(!allRepliesShown);
+        setOpen(false);
       }}
       footer={null}
       className="custom-modal replies-modal__container"
@@ -87,17 +94,11 @@ const AllCommentReplies = ({
                       content={
                         <MoreActions
                           type={'comment'}
-                          postId={postId}
+                          setPopoverOpen={setPopoverOpen}
                           commentId={comment.id}
                           commentIndex={commentIndex}
-                          comments={comments}
-                          setComments={setComments}
-                          commentInputOpen={commentInputOpen}
-                          setCommentInputOpen={setCommentInputOpen}
-                          setPopoverOpen={setPopoverOpen}
-                          posterId={posterId}
-                          commentorId={commentorId}
-                          setAllRepliesShown={setAllRepliesShown}
+                          commentorId={comment.commentor.id}
+                          cioIndex={cioIndex}
                         />
                       }
                     >
@@ -106,23 +107,31 @@ const AllCommentReplies = ({
                   </div>
                 </div>
               </div>
-              <CommentContent comment={comment} />
-              <div className="comment-card__operation--bottom">
+              {commentInputOpen[cioIndex].edit_state ? (
+                <TiptapComment
+                  initContent={comment.content_html}
+                  cioIndex={cioIndex}
+                />
+              ) : (
+                <CommentContent comment={comment} />
+              )}
+              <div
+                className={cn(
+                  'comment-card__operation--bottom',
+                  commentInputOpen[cioIndex].edit_state && 'mt-4'
+                )}
+              >
                 <span className="comment-card__time">
                   {stringUtils.uppercaseStr(
-                    dayjs(comment.created_at).fromNow()
+                    dayjs(comment.updated_at).fromNow()
                   )}
                 </span>
                 <div className="comment-card__operation--right">
                   <div
                     className="comment-card-operation-bottom__item"
                     onClick={() => {
-                      handleOpenCommentInput(cioIndex);
-                      setInputContent({
-                        content_html: '',
-                        content_json: '',
-                        reply_to: null,
-                      });
+                      openCommentInput(cioIndex);
+                      setReplyToId(null);
                     }}
                   >
                     <AiOutlineComment className="comment-reply__icon" />
@@ -155,11 +164,9 @@ const AllCommentReplies = ({
               {comment.liked_by_poster && <Liked />}
               {commentInputOpen[cioIndex].state && (
                 <TiptapReply
-                  replyInputOpen={commentInputOpen[cioIndex].state}
-                  sendReplyLoading={sendReplyLoading}
-                  reply={inputContent}
-                  setReply={setInputContent}
-                  handleSendReply={handleSendReply}
+                  commentId={comment.id}
+                  commentIndex={commentIndex}
+                  crboIndex={cioIndex}
                 />
               )}
             </div>
@@ -168,7 +175,11 @@ const AllCommentReplies = ({
           <div className="reply-list">
             {comment.replies.length === 0 ? (
               <div className="flex flex-col my-6 items-center justify-center">
-                <img src={images.nothing} alt="nothing" className="w-[276px]" />
+                <img
+                  src={images.no_comment}
+                  alt="nothing"
+                  className="w-[168px] mb-4"
+                />
                 <p className="note-comment__empty--title">
                   There are no comments ~.~
                 </p>
@@ -181,17 +192,9 @@ const AllCommentReplies = ({
                     reply={reply}
                     replyIndex={index}
                     cioIndex={cioIndex + index + 1}
-                    comments={comments}
-                    setComments={setComments}
                     commentIndex={commentIndex}
                     commentId={comment.id}
-                    postId={postId}
-                    commentInputOpen={commentInputOpen}
-                    setCommentInputOpen={setCommentInputOpen}
-                    handleOpenReplyInput={handleOpenReplyInput}
-                    inputContent={inputContent}
-                    setInputContent={setInputContent}
-                    handleSendReply={handleSendReply}
+                    commentorId={comment.commentor.id}
                   />
                 </div>
               ))

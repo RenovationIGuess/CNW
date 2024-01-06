@@ -66,6 +66,53 @@ class PostCommentController extends Controller
         }
     }
 
+    // Update the content of the comment
+    public function update(Request $request, $postId, $commentId)
+    {
+        try {
+            $data = $request->validate([
+                'content_html' => 'string|required',
+                'content_json' => 'string|required',
+            ]);
+
+            $user = auth()->user();
+            $post = Post::findOrFail($postId);
+            $comment = $post->comments()->findOrFail($commentId);
+
+            if ($comment->post_id != $post->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The comment to update is not in this post!',
+                ], 404);
+            }
+
+            if ($comment->user_id != $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not authorized to update this comment!',
+                ], 403);
+            }
+
+            $comment->update($data);
+
+            return response()->json([
+                'data' => $comment,
+                'success' => true,
+                'message' => 'Updated',
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->errors(),
+            ], 422);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
     public function likeComment(Request $request, $postId, $commentId)
     {
         try {

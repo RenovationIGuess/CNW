@@ -24,7 +24,7 @@ const NewPostPopover = () => {
                 <button
                   type="button"
                   className="post-button__button"
-                  onClick={() => navigate('/newPost?type=all')}
+                  onClick={() => navigate('/newBlog?type=all')}
                 >
                   <span className="post-button__icon__wrapper">
                     <AiOutlineEdit className="post-button__icon" />

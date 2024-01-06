@@ -39,17 +39,17 @@ const PostActions = ({ post, setPopoverOpen }) => {
           message: 'Deleted',
         });
 
-        if (pathname === `/post/${post.id}`) {
+        if (pathname === `/blogs/${post.id}`) {
           navigate('/blogs');
         }
       })
       .catch((err) => {
         if (err.response && err.response.status === 403) {
           toast.error('You are not allowed to delete this post', {
-            duration: 1500,
+            position: 'top-right',
+            duration: 3000,
           });
         }
-
         console.log(err);
       })
       .finally(() => {
@@ -68,10 +68,11 @@ const PostActions = ({ post, setPopoverOpen }) => {
           className="action-menu__item"
           onClick={() => {
             setPopoverOpen(false);
+            navigate(`/blogs/${post.id}/edit`);
           }}
         >
           <AiOutlineEdit className="action-menu__icon" />
-          <span className="action-menu__label">Edit Post</span>
+          <span className="action-menu__label">Edit Blog</span>
         </li>
         <li
           className="action-menu__item"
@@ -108,12 +109,13 @@ const PostActions = ({ post, setPopoverOpen }) => {
             setConfirmModalInfo({
               title: `Xác nhận xóa post?`,
               message: `Post không thể khôi phục sau khi xóa. Bạn có chắc mình muốn xóa?`,
-              callback: () => handleDeletePost(),
+              confirmCallback: () => handleDeletePost(),
+              cancelCallback: () => {},
             });
           }}
         >
           <BsTrash className="action-menu__icon" />
-          <span className="action-menu__label">Delete Post</span>
+          <span className="action-menu__label">Delete Blog</span>
         </li>
       </ul>
     </div>

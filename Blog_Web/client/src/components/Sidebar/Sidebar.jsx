@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import UserProfileSection from './UserProfileSection';
-import { AiFillCalendar, AiFillSetting } from 'react-icons/ai';
+import { AiFillSetting } from 'react-icons/ai';
 import { useMediaQuery } from 'usehooks-ts';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '~/utils';
@@ -8,14 +8,9 @@ import { IoSearch } from 'react-icons/io5';
 import OtherOptions from './OtherOptions';
 import MinimizedSidebar from './MinimizedSidebar';
 import { Tooltip } from 'antd';
-import StarredSection from './StarredSection';
-import TeamspaceSection from './TeamspaceSection';
-import { GiCardExchange, GiNotebook } from 'react-icons/gi';
-import UserDirSection from './UserDirSection';
 import { images } from '~/constants';
 
 const Sidebar = ({}) => {
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -24,7 +19,6 @@ const Sidebar = ({}) => {
   const navbarRef = useRef(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [scrollBottom, setScrollBottom] = useState(false);
 
   useEffect(() => {
@@ -124,11 +118,8 @@ const Sidebar = ({}) => {
         )}
       >
         <UserProfileSection
-          isUserModalOpen={isUserModalOpen}
-          setIsUserModalOpen={setIsUserModalOpen}
           handleMinimizedSidebar={(e) => {
             e.stopPropagation();
-            setIsUserModalOpen(false);
             collapse();
           }}
         />

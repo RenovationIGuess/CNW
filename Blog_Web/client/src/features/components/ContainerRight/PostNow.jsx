@@ -12,7 +12,7 @@ const PostNow = () => {
       <div className="side-section new-post-card">
         <div className="side-section__header">
           <h2 className="side-section__title">
-            <p className="new-post-card__title">Post now ~</p>
+            <p className="new-post-card__title">Blog now ~</p>
           </h2>
           <div className="post-draft">
             <FaFirstdraft className="icon" />
@@ -23,7 +23,7 @@ const PostNow = () => {
           <div className="new-post-card__content">
             <div
               className="new-post-card__post"
-              onClick={() => navigate('/newPost?type=all')}
+              onClick={() => navigate('/newBlog?type=all')}
             >
               <div className="new-post-card__item">
                 <div className="post-icon">

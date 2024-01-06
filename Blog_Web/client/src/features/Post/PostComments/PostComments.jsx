@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { images } from '~/constants';
-import NoteCommentsSkeletonLoading from '~/features/components/NoteComments/NoteCommentsSkeletonLoading';
 import PostCommentCard from './PostCommentCard';
+import usePostStore from '~/store/usePostStore';
+import { cn } from '~/utils';
+import AllCommentReplies from './AllCommentReplies';
+import PostCommentsSkeletonLoading from './PostCommentsSkeletonLoading';
 
-const Comments = ({
-  postId,
-  posterId,
-  comments,
-  setComments,
-  commentInputOpen,
-  setCommentInputOpen,
-  handleOpenCommentInput,
-  inputContent,
-  setInputContent,
-}) => {
+const Comments = ({}) => {
+  const [comments] = usePostStore((state) => [state.comments]);
+
   // Index for commentInputOpen array
   let curIndex = 0;
   return comments.map((comment, ind) => {
@@ -23,52 +18,27 @@ const Comments = ({
     return (
       <PostCommentCard
         key={comment.id}
-        postId={postId}
-        posterId={posterId}
         comment={comment}
         commentIndex={ind}
         cioIndex={index}
-        comments={comments}
-        setComments={setComments}
-        commentInputOpen={commentInputOpen}
-        setCommentInputOpen={setCommentInputOpen}
-        handleOpenCommentInput={handleOpenCommentInput}
-        handleOpenReplyInput={handleOpenCommentInput}
-        inputContent={inputContent}
-        setInputContent={setInputContent}
       />
     );
   });
 };
 
-const PostComments = ({
-  postId,
-  posterId,
-  comments,
-  setComments,
-  inputContent,
-  setInputContent,
-  commentInputOpen,
-  setCommentInputOpen,
-  fetchCommentsLoading,
-}) => {
+const PostComments = ({}) => {
+  const [comments, fetchingComments] = usePostStore((state) => [
+    state.comments,
+    state.fetchingComments,
+  ]);
+  const [selectedComment] = usePostStore((state) => [state.selectedComment]);
+
+  const [openAllRepliesModal, setOpenAllRepliesModal] = useState(false);
   const [commentFilterOpen, setCommentFilterOpen] = useState(false);
 
-  const handleOpenCommentInput = (commentIndex) => {
-    setCommentInputOpen(
-      commentInputOpen.map((c, ind) => {
-        if (ind === commentIndex)
-          return {
-            ...c,
-            state: !c.state,
-          };
-        return {
-          ...c,
-          state: false,
-        };
-      })
-    );
-  };
+  if (fetchingComments) {
+    return <PostCommentsSkeletonLoading />;
+  }
 
   return (
     <div className="comment-list__container">
@@ -76,9 +46,10 @@ const PostComments = ({
       <div className="comment-list__container--header">
         <div className="comment-list__filter">
           <div
-            className={`filter-select__container${
-              commentFilterOpen ? ' filter-select__container--active' : ''
-            }`}
+            className={cn(
+              'filter-select__container',
+              commentFilterOpen && ' filter-select__container--active'
+            )}
             onClick={() => setCommentFilterOpen(!commentFilterOpen)}
           >
             <span className="select-label">
@@ -95,29 +66,28 @@ const PostComments = ({
         </div>
       </div>
       <div className={``}>
-        {fetchCommentsLoading ? (
-          <NoteCommentsSkeletonLoading />
-        ) : comments.length === 0 ? (
+        {comments.length === 0 && (
           <div className="flex flex-col mt-6 items-center justify-center">
-            <img src={images.nothing} alt="nothing" className="w-[276px]" />
+            <img
+              src={images.no_comment}
+              alt="nothing"
+              className="w-[168px] mb-6"
+            />
             <p className="note-comment__empty--title">
               There are no comments ~.~
             </p>
           </div>
-        ) : (
-          <Comments
-            comments={comments}
-            postId={postId}
-            posterId={posterId}
-            setComments={setComments}
-            commentInputOpen={commentInputOpen}
-            setCommentInputOpen={setCommentInputOpen}
-            handleOpenCommentInput={handleOpenCommentInput}
-            inputContent={inputContent}
-            setInputContent={setInputContent}
-          />
         )}
+        {comments.length > 0 && <Comments />}
       </div>
+
+      <AllCommentReplies
+        comment={selectedComment.comment}
+        commentIndex={selectedComment.commentIndex}
+        cioIndex={selectedComment.cioIndex}
+        open={openAllRepliesModal}
+        setOpen={setOpenAllRepliesModal}
+      />
     </div>
   );
 };

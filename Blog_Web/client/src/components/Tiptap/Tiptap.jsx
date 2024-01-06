@@ -15,7 +15,13 @@ import TableBubbleMenu from './BubbleMenu/TableBubbleMenu';
 import useNotesStore from '~/store/useNotesStore';
 import { useLocation } from 'react-router-dom';
 
-const Tiptap = ({ noteId, contentHTML, contentJSON, setNote }) => {
+const Tiptap = ({
+  noteId,
+  contentHTML,
+  contentJSON,
+  setNote,
+  editable = true,
+}) => {
   const { pathname } = useLocation();
 
   // Current selected text
@@ -71,6 +77,7 @@ const Tiptap = ({ noteId, contentHTML, contentJSON, setNote }) => {
 
   const editor = useEditor(
     {
+      editable: editable,
       extensions: extensions,
       editorProps: {
         attributes: {
@@ -133,7 +140,7 @@ const Tiptap = ({ noteId, contentHTML, contentJSON, setNote }) => {
 
   return (
     <div className="editor-container">
-      <MenuBar editor={editor} />
+      {editable && <MenuBar editor={editor} />}
       {editor && (
         <BubbleMenu
           editor={editor}

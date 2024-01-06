@@ -468,7 +468,7 @@
   line-height: 1;
 }
 
-.editor-container .editor-tool-popup {
+.editor-tool-popup {
   position: absolute;
   top: 40px;
   z-index: 110;
@@ -484,11 +484,11 @@
   padding: 8px 4px;
 }
 
-.editor-container .toolbar-list.toolbar-list--color {
+.toolbar-list--color {
   padding: 8px 12px;
 }
 
-.editor-container .toolbar-list__item {
+.toolbar-list__item {
   display: flex;
   align-items: center;
   padding: 8px;
@@ -502,23 +502,23 @@
   }
 }
 
-.editor-container .toolbar-list__item--active {
+.toolbar-list__item--active {
   background-color: var(--default-hover-background-color);
   color: #657ef8;
 }
 
-.editor-container .toolbar-list__item--active * {
+.toolbar-list__item--active * {
   color: #657ef8;
 }
 
-.editor-container .toolbar-list .editor-icon {
+.editor-icon {
   font-size: 24px;
   line-height: 1;
   vertical-align: top;
   color: var(--patch-font-color);
 }
 
-.editor-container .toolbar-list__item:hover .editor-icon {
+.toolbar-list__item:hover .editor-icon {
   color: #657ef8;
 }
 
@@ -529,11 +529,7 @@
   transform: rotateX(180deg);
 }
 
-.editor-container
-  .toolbar-insert
-  .toolbar-list
-  .toolbar-insert-item
-  .editor-icon {
+.toolbar-insert-item .editor-icon {
   font-size: 24px;
   margin-right: 8px;
   color: var(--patch-font-color);
@@ -541,11 +537,7 @@
   vertical-align: top;
 }
 
-.editor-container
-  .toolbar-insert
-  .toolbar-list
-  .toolbar-insert-item
-  .item-arrow {
+.toolbar-insert-item .item-arrow {
   font-size: 20px;
   margin-left: 8px;
   color: var(--patch-font-color);
@@ -553,7 +545,7 @@
   vertical-align: top;
 }
 
-.editor-container .toolbar-insert .toolbar-list .toolbar-insert-item:hover {
+.toolbar-insert-item:hover {
   .editor-icon,
   .item-name,
   .item-arrow {
@@ -563,11 +555,7 @@
   background-color: var(--recommend-author-game-hover);
 }
 
-.editor-container
-  .toolbar-insert
-  .toolbar-list
-  .toolbar-insert-item
-  .item-name {
+.toolbar-insert-item .item-name {
   font-size: 14px;
   font-weight: 500;
   -webkit-box-flex: 1;
@@ -614,7 +602,7 @@
 }
 
 // Divider div
-.editor-container .toolbar-insert .toolbar-list .divider-container {
+.divider-container {
   position: absolute;
   z-index: 110;
   left: 98%;
@@ -625,11 +613,7 @@
   display: none;
 }
 
-.editor-container
-  .toolbar-insert
-  .toolbar-list
-  .divider-container
-  .divider-box {
+.divider-container .divider-box {
   position: static;
 }
 
@@ -659,11 +643,7 @@
   vertical-align: middle;
 }
 
-.editor-container
-  .toolbar-insert
-  .toolbar-list
-  .toolbar-list__item.toolbar-list__item--divider:hover
-  .divider-container {
+.toolbar-list__item.toolbar-list__item--divider:hover .divider-container {
   display: block;
 }
 
@@ -2110,4 +2090,11 @@ input.input-container {
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+}
+
+.tiptap-popover {
+  padding: 8px 4px;
+  border-radius: 12px;
+  background-color: var(--popup-bg-color);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }

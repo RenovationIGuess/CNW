@@ -49,8 +49,6 @@ class User extends Authenticatable implements JWTSubject
 
     protected $appends = [
         'profile',
-        'private_dir',
-        'public_dir',
     ];
 
     /**
@@ -90,23 +88,6 @@ class User extends Authenticatable implements JWTSubject
 
             // Create an instance of the user setting
             $user->userSetting()->create();
-
-            // Create 2 default directory for the user, public and private
-            // Create the private directory
-            $user->directories()->create([
-                'title' => 'Private',
-                'icon' => \config('env.default_dir_icon'),
-                'user_id' => $user->id,
-                'directory_id' => null,
-            ]);
-
-            // Create the public directory
-            $user->directories()->create([
-                'title' => 'Public',
-                'icon' => \config('env.default_dir_icon'),
-                'user_id' => $user->id,
-                'directory_id' => null,
-            ]);
         });
     }
 
@@ -136,70 +117,6 @@ class User extends Authenticatable implements JWTSubject
         );
     }
 
-    // Directories related relations
-    // One user can have many directories
-    public function directories()
-    {
-        return $this->hasMany(Directory::class);
-    }
-
-    protected function privateDir(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->directories()
-                ->where('title', 'Private')
-                ->where('directory_id', null)
-                ->first()->append('child_items'),
-        );
-    }
-
-    protected function publicDir(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->directories()
-                ->where('title', 'Public')
-                ->where('directory_id', null)
-                ->first()->append('child_items'),
-        );
-    }
-
-    // Notes related relations
-    // One user can have many notes
-    public function notes(): HasMany
-    {
-        return $this->hasMany(Note::class)->orderBy('created_at', 'DESC');
-    }
-
-    // One user can have many note comments
-    public function noteComments(): HasMany
-    {
-        return $this->hasMany(NoteComment::class)->orderBy('created_at', 'DESC');
-    }
-
-    // One user can be the creator of many note's histories
-    public function noteHistories(): HasMany
-    {
-        return $this->hasMany(NoteHistory::class)->orderBy('created_at', 'DESC');
-    }
-
-    // Lay ra trang thai upvote, downvote doi voi 1 note?
-    public function noteCommentInteractions(): BelongsToMany
-    {
-        return $this->belongsToMany(NoteComment::class)->using(NoteCommentUser::class)->withTimestamps();
-    }
-
-    // Calendars related relations
-    // A user can have many calendars
-    public function schedules(): HasMany
-    {
-        return $this->hasMany(Schedule::class);
-    }
-
-    public function events(): HasMany
-    {
-        return $this->hasMany(Event::class);
-    }
-
     // Post related relations
     // A user can up many posts
     public function posts(): HasMany
@@ -227,22 +144,10 @@ class User extends Authenticatable implements JWTSubject
             ->using(PostCommentUser::class);
     }
 
-    // A user can create many tags for their notes, etc
-    public function tags(): HasMany
-    {
-        return $this->hasMany(Tag::class);
-    }
-
     // A user can receive many notifications
     public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class);
-    }
-
-    // A user can have many flashcard decks
-    public function flashcardDecks(): HasMany
-    {
-        return $this->hasMany(FlashcardDeck::class);
     }
 
     public function scopeWithUserProfile($query)

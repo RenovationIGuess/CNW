@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import SocialPageContainer from '~/features/components/SocialPageContainer/SocialPageContainer';
 import SocialPageHeader from '~/features/components/SocialPageHeader/SocialPageHeader';
 import usePostsStore from '~/store/usePostsStore';
+import './styles/Dashboard.scss';
+import './styles/UserInfoEditModal.scss';
 
 const Posts = () => {
   // const [searchValue, setSearchValue] = useState('');

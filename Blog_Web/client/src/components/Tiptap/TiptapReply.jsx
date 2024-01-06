@@ -2,28 +2,35 @@ import { BubbleMenu, useEditor, EditorContent } from '@tiptap/react';
 import './Tiptap.scss';
 import CustomBubbleMenu from './BubbleMenu/CustomBubbleMenu';
 import { useEffect, useState } from 'react';
-import { BsEmojiSmile, BsFillImageFill } from 'react-icons/bs';
-import { MdOutlineAlternateEmail } from 'react-icons/md';
-import { AiOutlineLink } from 'react-icons/ai';
-import { Tooltip } from 'antd';
 import { handlePaste } from './utils/handlePaste';
 import { handleDrop } from './utils/handleDrop';
 import LinkBubbleMenu from './BubbleMenu/LinkBubbleMenu';
 import extensions from './extensions/tiptapExtension';
 import TableBubbleMenu from './BubbleMenu/TableBubbleMenu';
-import { cn } from '~/utils';
+import { userStateContext } from '~/contexts/ContextProvider';
+import usePostStore from '~/store/usePostStore';
+import { cn, stringUtils } from '~/utils';
+import TiptapCommentFooter from './TiptapCommentFooter';
 
-const TiptapReply = ({
-  sendReplyLoading,
-  reply,
-  crboIndex,
-  setReply,
-  handleSendReply,
-  replyInputOpen,
-  editState = false,
-  setEditState = () => {},
-}) => {
-  const [linkContent, setLinkContent] = useState(false);
+const TiptapReply = ({ initContent, commentId, commentIndex, crboIndex }) => {
+  const { currentUser } = userStateContext();
+
+  const [post] = usePostStore((state) => [state.post]);
+  const [sendReply, sendReplyLoading] = usePostStore((state) => [
+    state.sendReply,
+    state.sendReplyLoading,
+  ]);
+  const [commentInputOpen] = usePostStore((state) => [state.commentInputOpen]);
+  const [toggleEditComment, editReply, editReplyLoading] = usePostStore(
+    (state) => [
+      state.toggleEditComment,
+      state.editReply,
+      state.editReplyLoading,
+    ]
+  );
+  const [replyToId] = usePostStore((state) => [state.replyToId]);
+
+  const [linkContent, setLinkContent] = useState('');
   const [linkNodePos, setLinkNodePos] = useState({});
 
   const editor = useEditor(
@@ -52,22 +59,19 @@ const TiptapReply = ({
           },
         },
       },
-      onUpdate({ editor }) {
-        setReply({
-          ...reply,
-          content_json: JSON.stringify(editor.getJSON()),
-          content_html: editor.getHTML(),
-        });
-      },
-      content: reply.content_html,
+      content: initContent,
     },
     []
   );
 
   useEffect(() => {
     if (!editor) return;
-    editor.commands.setContent('');
-  }, [sendReplyLoading, replyInputOpen]);
+    if (stringUtils.isContentEmpty(initContent)) {
+      editor.commands.setContent('');
+    } else {
+      editor.commands.setContent(initContent);
+    }
+  }, [sendReplyLoading, initContent]);
 
   return (
     <>
@@ -135,46 +139,70 @@ const TiptapReply = ({
         )}
         <EditorContent className="comment-content" editor={editor} />
       </div>
-      <div className={cn('comment-footer', editState && 'mb-3')}>
+      <div className="comment-footer">
         <div className="comment-footer__toolbar">
-          <Tooltip placement="bottom" title="Add emojis">
-            <BsEmojiSmile className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add images">
-            <BsFillImageFill className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add links">
-            <AiOutlineLink className="comment-tool__icon" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Add mentions">
-            <MdOutlineAlternateEmail className="comment-tool__icon" />
-          </Tooltip>
+          <TiptapCommentFooter editor={editor} />
         </div>
         <div className="flex items-center">
-          {editState && (
+          {crboIndex != null && commentInputOpen[crboIndex].edit_state && (
             <button
-              onClick={() => setEditState(false)}
+              onClick={() => toggleEditComment(crboIndex)}
               className="account-edit-btn account-edit-cancel-btn"
             >
               Cancel
             </button>
           )}
           <button
-            className={`send-button${
-              reply.content_html === '<p></p>' || reply.content_html === ''
-                ? ' send-button__disabled'
-                : ''
-            }`}
-            onClick={() =>
-              reply.content_html === '<p></p>' || reply.content_html === ''
-                ? {}
-                : handleSendReply(crboIndex)
-            }
-          >
-            {sendReplyLoading && (
-              <span className="my-loader sm-send-comment__loader"></span>
+            className={cn(
+              'send-button',
+              editor &&
+                stringUtils.isContentEmpty(editor.getHTML(), 'html') &&
+                'send-button__disabled'
             )}
-            <span>{sendReplyLoading ? 'Sending...' : 'Send'}</span>
+            onClick={() => {
+              if (
+                editor &&
+                !stringUtils.isContentEmpty(editor.getHTML(), 'html')
+              ) {
+                if (
+                  crboIndex != null &&
+                  commentInputOpen[crboIndex].edit_state
+                ) {
+                  editReply(
+                    commentInputOpen[crboIndex].comment_id,
+                    commentIndex,
+                    {
+                      content_json: JSON.stringify(editor.getJSON()),
+                      content_html: editor.getHTML(),
+                    }
+                  );
+                } else {
+                  sendReply(
+                    {
+                      post_id: post.id,
+                      user_id: currentUser.id,
+                      post_comment_id: commentId,
+                      content_json: JSON.stringify(editor.getJSON()),
+                      content_html: editor.getHTML(),
+                      reply_to: replyToId,
+                      pinned: false,
+                    },
+                    commentIndex,
+                    crboIndex
+                  );
+                }
+              }
+            }}
+          >
+            {sendReplyLoading ||
+              (initContent != null && editReplyLoading && (
+                <span className="my-loader sm-send-comment__loader"></span>
+              ))}
+            <span>
+              {sendReplyLoading || (initContent != null && editReplyLoading)
+                ? 'Sending...'
+                : 'Send'}
+            </span>
           </button>
         </div>
       </div>

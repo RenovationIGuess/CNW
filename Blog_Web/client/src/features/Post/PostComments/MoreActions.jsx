@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineEdit, AiOutlineUserDelete } from 'react-icons/ai';
-import { BsFlag, BsTrash } from 'react-icons/bs';
+import { BsFillPinAngleFill, BsFlag, BsTrash } from 'react-icons/bs';
+import { MdOutlineEditOff } from 'react-icons/md';
 import axiosClient from '~/axios';
-import ConfirmModal from '~/components/ConfirmModal/ConfirmModal';
 import { userStateContext } from '~/contexts/ContextProvider';
 import useModalStore from '~/store/useModalStore';
+import usePostStore from '~/store/usePostStore';
 import { stringUtils } from '~/utils';
 
 const MoreActions = ({
-  postId,
   type,
+  setPopoverOpen = () => {},
   commentId,
-  replyId,
-  commentIndex,
-  comments,
-  setComments,
-  commentInputOpen,
-  setCommentInputOpen,
-  setEditState,
-  setPopoverOpen,
-  posterId,
-  replierId,
   commentorId,
-  setAllRepliesShown,
+  commentIndex,
+  replyId,
+  replierId,
+  cioIndex,
 }) => {
   const { currentUser } = userStateContext();
+
+  const [post] = usePostStore((state) => [state.post]);
+  const [comments, setComments] = usePostStore((state) => [
+    state.comments,
+    state.setComments,
+  ]);
+  const [commentInputOpen, setCommentInputOpen] = usePostStore((state) => [
+    state.commentInputOpen,
+    state.setCommentInputOpen,
+  ]);
+  const [setSelectedComment, setAllRepliesShown] = usePostStore((state) => [
+    state.setSelectedComment,
+    state.setAllRepliesShown,
+  ]);
+  const [toggleEditComment] = usePostStore((state) => [
+    state.toggleEditComment,
+  ]);
 
   // Confirm Modal
   const [setConfirmModalLoading, setConfirmModalInfo, setConfirmModalOpen] =
@@ -39,7 +50,7 @@ const MoreActions = ({
   const handleDeleteReply = () => {
     setConfirmModalLoading(true);
     axiosClient
-      .delete(`/posts/${postId}/comments/${replyId}`)
+      .delete(`/posts/${post.id}/comments/${replyId}`)
       .then(({ data }) => {
         comments[commentIndex].replies = comments[commentIndex].replies.filter(
           (r) => r.id !== replyId
@@ -66,14 +77,24 @@ const MoreActions = ({
   const handleDeleteComment = () => {
     setConfirmModalLoading(true);
     axiosClient
-      .delete(`/posts/${postId}/comments/${commentId}`)
+      .delete(`/posts/${post.id}/comments/${commentId}`)
       .then(({ data }) => {
-        setAllRepliesShown && setAllRepliesShown(false);
+        setSelectedComment({});
+        setAllRepliesShown(false);
 
+        // Delete the comment in the comments array
         setComments(comments.filter((c) => c.id !== commentId));
 
+        // Delete the comment, as well as its replies
+        const comment = comments[commentIndex];
+        const commentsToDelete = [
+          comment.id,
+          ...comment.replies.map((r) => r.id),
+        ];
         setCommentInputOpen(
-          commentInputOpen.filter((c) => c.comment_id !== commentId)
+          commentInputOpen.filter(
+            (c) => !commentsToDelete.includes(c.comment_id)
+          )
         );
 
         setConfirmModalLoading(false);
@@ -93,19 +114,37 @@ const MoreActions = ({
     <div className="action-menu">
       <div className="action-menu__title">More</div>
       <ul className="action-menu__list">
-        {(currentUser.id === posterId ||
-          (replierId && currentUser.id === replierId) ||
-          currentUser.id === commentorId) && (
+        {((type === 'reply' && currentUser.id === replierId) ||
+          (type === 'comment' && currentUser.id === commentorId)) && (
           <li
             className="action-menu__item"
             onClick={() => {
-              setEditState(true);
+              toggleEditComment(cioIndex);
               setPopoverOpen(false);
             }}
           >
-            <AiOutlineEdit className="action-menu__icon" />
+            {commentInputOpen[cioIndex].edit_state ? (
+              <MdOutlineEditOff className="action-menu__icon" />
+            ) : (
+              <AiOutlineEdit className="action-menu__icon" />
+            )}
             <span className="action-menu__label">
-              Edit {stringUtils.uppercaseStr(type)}
+              {commentInputOpen[cioIndex].edit_state
+                ? 'Cancel Editing'
+                : `Edit ${stringUtils.uppercaseStr(type)}`}
+            </span>
+          </li>
+        )}
+        {type === 'comment' && currentUser.id === post.poster.id && (
+          <li
+            className="action-menu__item"
+            onClick={() => {
+              setPopoverOpen(false);
+            }}
+          >
+            <BsFillPinAngleFill className="action-menu__icon" />
+            <span className="action-menu__label">
+              Pin this {stringUtils.uppercaseStr(type)}
             </span>
           </li>
         )}
@@ -129,9 +168,9 @@ const MoreActions = ({
           <AiOutlineUserDelete className="action-menu__icon" />
           <span className="action-menu__label">Block User</span>
         </li>
-        {(currentUser.id === posterId ||
-          (replierId && currentUser.id === replierId) ||
-          currentUser.id === commentorId) && (
+        {(currentUser.id === post.poster.id ||
+          (type === 'reply' && currentUser.id === replierId) ||
+          (type === 'comment' && currentUser.id === commentorId)) && (
           <li
             onClick={() => {
               setConfirmModalOpen(true);
@@ -141,10 +180,11 @@ const MoreActions = ({
                 message: `${stringUtils.uppercaseStr(
                   type
                 )} không thể khôi phục sau khi xóa. Bạn có chắc mình muốn xóa?`,
-                callback: () =>
+                confirmCallback: () =>
                   type === 'comment'
                     ? handleDeleteComment()
                     : handleDeleteReply(),
+                cancelCallback: () => {},
               });
             }}
             className="action-menu__item"

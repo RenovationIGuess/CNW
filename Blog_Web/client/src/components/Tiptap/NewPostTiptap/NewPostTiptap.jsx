@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../Tiptap.scss';
-import { BubbleMenu, useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import { handlePaste } from '../utils/handlePaste';
 import { handleDrop } from '../utils/handleDrop';
 import NewPostMenuBar from './NewPostMenuBar';
-import CustomBubbleMenu from '../BubbleMenu/CustomBubbleMenu';
 import { cn } from '~/utils';
 import extensions from '../extensions/tiptapExtension';
+import TiptapBubbleMenu from '../BubbleMenu/TiptapBubbleMenu';
+import { debounce } from 'lodash';
 
 const NewPostTiptap = ({ post, setPost, error }) => {
+  const debouncedSave = useCallback(
+    debounce((contentJSON, contentHTML) => {
+      console.log('re-render');
+      setPost({
+        ...post,
+        content_json: contentJSON,
+        content_html: contentHTML,
+      });
+    }, 0),
+    [post]
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSave.flush();
+    };
+  }, [debouncedSave]);
+
   const editor = useEditor(
     {
       extensions: extensions,
@@ -39,13 +58,9 @@ const NewPostTiptap = ({ post, setPost, error }) => {
         const contentJSON = JSON.stringify(editor.getJSON());
         const contentHTML = editor.getHTML();
 
-        setPost({
-          ...post,
-          content_json: contentJSON,
-          content_html: contentHTML,
-        });
+        debouncedSave(contentJSON, contentHTML);
       },
-      content: post.content_json ? JSON.parse(post.content_json) : '',
+      content: post.content_html,
     },
     []
   );
@@ -53,12 +68,8 @@ const NewPostTiptap = ({ post, setPost, error }) => {
   return (
     <div className="editor-container social-post-editor-container">
       <div className={cn('post-editor', error && 'error-border-color')}>
+        <TiptapBubbleMenu editor={editor} />
         <NewPostMenuBar editor={editor} />
-        {editor && (
-          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-            <CustomBubbleMenu editor={editor} />
-          </BubbleMenu>
-        )}
         <div className="post-editor-component">
           <div className="tiptap-content-container">
             <EditorContent className="post-tiptap-editor" editor={editor} />

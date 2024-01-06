@@ -1,26 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Sidebar.scss';
-import { AiFillCalendar, AiFillSetting } from 'react-icons/ai';
+import { AiFillSetting } from 'react-icons/ai';
 import { IoSearch } from 'react-icons/io5';
-import UserProfileSection from './UserProfileSection';
 import OtherOptions from './OtherOptions';
-import ActionNotiToast from '../ActionNotiToast';
-import { useNavigate } from 'react-router-dom';
 import { Tooltip } from 'antd';
+import UserProfileSection from './UserProfileSection';
 
 const MinimizedSidebar = ({ toggleSidebar }) => {
-  const navigate = useNavigate();
-
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-
   return (
     <nav className="sidebar__container sidebar__container--closed flex-shrink-0 flex-grow-0 position-relative">
       <div className="flex flex-col h-full max-h-full">
         <UserProfileSection
-          isUserModalOpen={isUserModalOpen}
-          setIsUserModalOpen={setIsUserModalOpen}
           handleMinimizedSidebar={() => {
-            setIsUserModalOpen(false);
             toggleSidebar();
           }}
           showToggleIcon={true}

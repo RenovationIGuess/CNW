@@ -1,16 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DashboardLayout from './components/Layout/Dashboard/DashboardLayout.jsx';
 import GuestLayout from './components/Layout/Guest/GuestLayout.jsx';
-import Home from './views/Home.jsx';
 import SignIn from './views/SignIn.jsx';
-import PrivateProfile from './views/PrivateProfile.jsx';
-import PublicProfile from './views/PublicProfile.jsx';
 import NotFound404 from './views/NotFound404.jsx';
 import Posts from './views/Posts.jsx';
 import Post from './views/Post.jsx';
 import NewPost from './views/NewPost.jsx';
 import GoogleAuth from './views/redirect/GoogleAuth.jsx';
 import GithubAuth from './views/redirect/GithubAuth.jsx';
+import EditPost from './views/EditPost.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,16 +24,12 @@ const router = createBrowserRouter([
         element: <Post />,
       },
       {
-        path: 'newPost',
+        path: 'newBlog',
         element: <NewPost />,
       },
       {
-        path: 'profile/private',
-        element: <PrivateProfile />,
-      },
-      {
-        path: 'profile/:id/public',
-        element: <PublicProfile />,
+        path: 'blogs/:id/edit',
+        element: <EditPost />,
       },
       {
         path: '*',

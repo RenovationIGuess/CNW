@@ -16,6 +16,9 @@ const AttachBanner = ({ post, setPost }) => {
     async function uploadToFirebase() {
       if (uploadedFile) {
         setUploadLoading(true);
+        if (post.banner) {
+          await removeFile(post.banner);
+        }
         const imageUrl = await uploadFile(uploadedFile);
         setUploadLoading(false);
         setPost({
@@ -52,9 +55,15 @@ const AttachBanner = ({ post, setPost }) => {
     setUploadedFile(null);
   };
 
+  const handleChangeBanner = () => {
+    postBannerRef.current.click();
+  };
+
   return (
     <div
-      className={`form-item-container${post.banner ? ' post-banner-show' : ''}`}
+      className={`form-item-container${
+        !uploadLoading && post.banner ? ' post-banner-show' : ''
+      }`}
     >
       <input
         type="file"
@@ -81,16 +90,12 @@ const AttachBanner = ({ post, setPost }) => {
             />
             <div className="banner-actions">
               <Tooltip placement="top" title="Upload new banner">
-                <div className="action-item">
+                <div onClick={handleChangeBanner} className="action-item">
                   <RiImageEditFill className="icon" />
                 </div>
               </Tooltip>
-              <Tooltip
-                placement="top"
-                title="Remove banner"
-                onClick={handleRemoveBanner}
-              >
-                <div className="action-item">
+              <Tooltip placement="top" title="Remove banner">
+                <div onClick={handleRemoveBanner} className="action-item">
                   <BsTrash3Fill className="icon icon-sm" />
                 </div>
               </Tooltip>
